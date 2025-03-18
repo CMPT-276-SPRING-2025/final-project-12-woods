@@ -1,0 +1,42 @@
+name: CI/CD for React with AWS Amplify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test -- --watchAll=false
+
+      - name: Build Project
+        run: npm run build
+
+      # Commented out deployment step (to enable later)
+      # - name: Deploy to AWS Amplify
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: ${{ secrets.AWS_REGION }}
+      #     AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
+      #   run: |
+      #     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      #     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      #     aws configure set region $AWS_REGION
+
+      #     aws amplify start-job --app-id $AMPLIFY_APP_ID --branch-name main --job-type RELEASE
