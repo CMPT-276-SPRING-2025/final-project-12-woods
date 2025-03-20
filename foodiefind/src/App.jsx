@@ -10,7 +10,7 @@ import Explore from './pages/Explore';
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
+      <div>
         {/* Navigation - Changed to specific hex color #363636 */}
         <nav className="py-4 shadow-md fixed w-full top-0 z-10" style={{ backgroundColor: '#363636' }}>
           <div className="container mx-auto flex items-center justify-evenly px-4">
@@ -43,7 +43,7 @@ function App() {
         </nav>
 
         {/* Page content - add margin-top to account for fixed navbar */}
-        <div className="container mx-auto p-4 mt-20 flex-grow">
+        <div >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plan" element={<Plan />} />
