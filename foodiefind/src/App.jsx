@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { FaHome, FaGlobe, FaFileAlt, FaUsers } from 'react-icons/fa'; // Import icons
+import { FaHome, FaGlobe, FaFileAlt, FaUsers, FaGithub } from 'react-icons/fa';
 
 // Import your page components
 import Home from './pages/Home';
@@ -42,8 +42,8 @@ function App() {
           </div>
         </nav>
 
-        {/* Page content - add margin-top to account for fixed navbar */}
-        <div className="container mx-auto p-4 mt-20 flex-grow">
+        {/* Page content - add margin-top to account for fixed navbar and margin-bottom for footer spacing */}
+        <div className="container mx-auto p-4 mt-20 mb-8 flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plan" element={<Plan />} />
@@ -51,6 +51,31 @@ function App() {
             <Route path="/about" element={<About />} />
           </Routes>
         </div>
+        
+        {/* Footer - Matching navigation bar style */}
+        <footer className="py-4 shadow-md w-full mt-auto" style={{ backgroundColor: '#363636' }}>
+          <div className="container mx-auto flex items-center justify-between px-4">
+            {/* Logo/Favicon */}
+            <div className="flex items-center">
+              <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8" />
+            </div>
+            
+            {/* Copyright text */}
+            <div className="text-white">
+              © 2025 FoodieFind. All rights reserved.
+            </div>
+            
+            {/* GitHub button */}
+            <a 
+              href="https://github.com/CMPT-276-SPRING-2025/final-project-12-woods" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="!text-white hover:!text-orange-500 flex items-center"
+            >
+              <FaGithub className="text-2xl" />
+            </a>
+          </div>
+        </footer>
       </div>
     </Router>
   );

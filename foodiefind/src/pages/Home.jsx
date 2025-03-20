@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import photo1 from '/src/assets/Home-images/Home-food-1.jpg';
 import photo2 from '/src/assets/Home-images/Home-food-2.jpg';
 import photo3 from '/src/assets/Home-images/Home-food-3.jpg';
@@ -111,45 +110,57 @@ function Home() {
   }, []);
   
   return (
-    <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
-      {/* Background image */}
-      <div
-        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-        className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
+    <div className="flex flex-col space-y-8 pb-16">
+      {/* Slideshow Section */}
+      <div className='max-w-[1400px] h-[500px] w-full m-auto relative group'>
+        {/* Background image */}
+        <div
+          style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+          className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
+        ></div>
+
+        {/* Left Arrow */}
+        <div
+          onClick={prevSlide}
+          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+        >
+          <BsChevronCompactLeft size={30} />
+        </div>
+
+        {/* Right Arrow */}
+        <div
+          onClick={nextSlide}
+          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+        >
+          <BsChevronCompactRight size={30} />
+        </div>
+
+        {/* Dots Navigation */}
+        <div className='flex justify-center py-2'>
+          {slides.map((_, slideIndex) => (
+            <div
+              key={slideIndex}
+              onClick={() => goToSlide(slideIndex)}
+              className={`text-2xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue-500' : 'text-gray-500'}`}
+            >
+              <RxDotFilled />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Welcome Text */}
+      <div className="text-center">
+        <h1 className="text-3xl font-bold mb-2">Find your next favorite spot!</h1>
+        <p className="text-lg mb-6">Checkout the hidden gems</p>
+      </div>
+
+      {/* Map Section - Reduced height and added margin-bottom */}
+      <div 
+        id="map" 
+        className="rounded-lg shadow-lg mb-12" 
+        style={{ height: "500px", width: "100%" }}
       ></div>
-
-      {/* Left Arrow */}
-      <div
-        onClick={prevSlide}
-        className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-      >
-        <BsChevronCompactLeft size={30} />
-      </div>
-
-      {/* Right Arrow */}
-      <div
-        onClick={nextSlide}
-        className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-      >
-        <BsChevronCompactRight size={30} />
-      </div>
-
-      {/* Dots Navigation */}
-      <div className='flex justify-center py-2'>
-        {slides.map((_, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className={`text-2xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue-500' : 'text-gray-500'}`}
-          >
-            <RxDotFilled />
-          </div>
-        ))}
-      </div>
-
-      <h1>Find your next favorite spot!</h1>
-      <p>Checkout the hidden gems</p>
-      <div id="map" style={{ height: "600px", width: "100%" }}></div>
     </div>
   );
 }
