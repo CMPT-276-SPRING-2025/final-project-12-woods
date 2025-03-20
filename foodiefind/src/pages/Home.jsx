@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import photo1 from '/src/assets/images/photo1.jpg';
 import photo2 from '/src/assets/images/photo2.jpg';
 import photo3 from '/src/assets/images/photo3.jpg';
