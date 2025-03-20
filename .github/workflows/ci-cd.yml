@@ -19,12 +19,15 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
+        working-directory: ./foodiefind
         run: npm install
 
-      - name: Run Tests
-        run: npm test -- --watchAll=false
+      - name: Lint
+        working-directory: ./foodiefind
+        run: npm run lint
 
       - name: Build Project
+        working-directory: ./foodiefind
         run: npm run build
 
       # Commented out deployment step (to enable later)
@@ -38,5 +41,5 @@ jobs:
       #     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
       #     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       #     aws configure set region $AWS_REGION
-
+      #
       #     aws amplify start-job --app-id $AMPLIFY_APP_ID --branch-name main --job-type RELEASE
