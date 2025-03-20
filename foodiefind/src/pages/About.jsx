@@ -5,7 +5,7 @@ const teamMembers = [
     name: "Ash Aung",
     role: "Project Manager, Developer",
     image: "/src/assets/profiles/Ash.jpg",
-    description: "Ash is our project Manager, he really likes to crash out",
+    description: "Ash is our project Manager, he is a real party animal",
   },
   {
     name: "Damon Yiu",
@@ -17,13 +17,13 @@ const teamMembers = [
     name: "Jim Chen",
     role: "QA, Developer",
     image: "/src/assets/profiles/Jim.jpg",
-    description: "Jim is our QA tester, he is funny",
+    description: "Jim is our QA tester, he is a fun guy and a funny guy",
   },
   {
     name: "Amir Matianiu",
     role: "Scrum & GH Manager, Developer",
     image: "/src/assets/profiles/Amir.jpg",
-    description: "Amir is our Scrum & GH Manager, he likes cars",
+    description: "Amir is our GH Manager, he can also be funny, sometimes",
   },
 ];
 

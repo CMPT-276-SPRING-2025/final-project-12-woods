@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import photo1 from '/src/assets/images/photo1.jpg';
-import photo2 from '/src/assets/images/photo2.jpg';
-import photo3 from '/src/assets/images/photo3.jpg';
+import photo1 from '/src/assets/Home-images/Home-food-1.jpg';
+import photo2 from '/src/assets/Home-images/Home-food-2.jpg';
+import photo3 from '/src/assets/Home-images/Home-food-3.jpg';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { RxDotFilled } from 'react-icons/rx';
 
@@ -147,8 +147,8 @@ function Home() {
         ))}
       </div>
 
-      <h1>Home Page</h1>
-      <p>Welcome to FoodieFind!</p>
+      <h1>Find your next favorite spot!</h1>
+      <p>Checkout the hidden gems</p>
       <div id="map" style={{ height: "600px", width: "100%" }}></div>
     </div>
   );
