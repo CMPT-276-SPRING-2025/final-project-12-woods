@@ -14,11 +14,11 @@ function App() {
         {/* Navigation - Changed to specific hex color #363636 */}
         <nav className="py-4 shadow-md fixed w-full top-0 z-10" style={{ backgroundColor: '#363636' }}>
           <div className="container mx-auto flex items-center justify-evenly px-4">
-            {/* Logo/Brand */}
-            <div className="flex items-center">
+            {/* Logo/Brand as a homepage link */}
+            <Link to="/" className="flex items-center hover:!text-orange-500">
               <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8 mr-3" />
               <span className="text-white text-xl font-bold">FoodieFind</span>
-            </div>
+            </Link>
             
             {/* Home */}
             <Link to="/" className="!text-white hover:!text-orange-500 flex items-center">
@@ -60,9 +60,9 @@ function App() {
               <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8" />
             </div>
             
-            {/* Copyright text */}
-            <div className="text-white">
-              © 2025 FoodieFind. All rights reserved.
+            <div className="text-white flex flex-col items-center">
+              <div>© 2025 FoodieFind.</div>
+              <div className="text-xs">All rights reserved.</div>
             </div>
             
             {/* GitHub button */}
