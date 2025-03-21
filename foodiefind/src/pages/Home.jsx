@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import photo1 from '/src/assets/Home-images/Home-food-1.jpg';
 import photo2 from '/src/assets/Home-images/Home-food-2.jpg';
 import photo3 from '/src/assets/Home-images/Home-food-3.jpg';
@@ -78,7 +77,7 @@ function loadGoogleMapsAPI() {
   };
 }
 
-//funtionality for slideshow
+//functionality for slideshow
 function Home() {
   const slides = [
     { url: photo1 },
@@ -87,31 +86,57 @@ function Home() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  
+  // Function to handle user interaction and pause auto-sliding
+  const handleUserInteraction = () => {
+    setIsPaused(true);
+    // Resume auto-sliding after 10 seconds of inactivity
+    setTimeout(() => setIsPaused(false), 10000);
+  };
+
+  // Auto-slide functionality
+  useEffect(() => {
+    if (!isPaused) {
+      const intervalId = setInterval(() => {
+        // Move to the next slide automatically
+        const isLastSlide = currentIndex === slides.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+      }, 5000); // Change slide every 5 seconds (5000ms)
+      
+      // Clean up the interval when component unmounts or isPaused changes
+      return () => clearInterval(intervalId);
+    }
+  }, [currentIndex, slides.length, isPaused]);
 
   const prevSlide = () => {
+    handleUserInteraction(); // Pause auto-sliding when user interacts
     const isFirstSlide = currentIndex === 0;
     const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
+    handleUserInteraction(); // Pause auto-sliding when user interacts
     const isLastSlide = currentIndex === slides.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
 
   const goToSlide = (slideIndex) => {
+    handleUserInteraction(); // Pause auto-sliding when user interacts
     setCurrentIndex(slideIndex);
   };
 
-  //useffect for googlemaps
+  // useEffect for Google Maps
   useEffect(() => {
     const cleanup = loadGoogleMapsAPI();
     return cleanup;
   }, []);
   
   return (
-    <div className='w-screen h-[780px] m-0 py-16 px-0 relative group'>
+    <div className='w-full h-[780px] m-0 py-16 px-0 relative group'>
       {/* Background image */}
       <div
         style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
@@ -149,7 +174,7 @@ function Home() {
 
       <h1>Find your next favorite spot!</h1>
       <p>Checkout the hidden gems</p>
-      <div id="map" style={{ height: "600px", width: "100%" }}></div>
+      <div id="map" class="h-[700px] w-1/2 ml-auto"></div>
     </div>
   );
 }
