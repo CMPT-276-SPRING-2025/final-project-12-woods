@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import photo1 from '/src/assets/Home-images/Home-food-1.jpg';
 import photo2 from '/src/assets/Home-images/Home-food-2.jpg';
 import photo3 from '/src/assets/Home-images/Home-food-3.jpg';
@@ -111,45 +110,54 @@ function Home() {
   }, []);
   
   return (
-    <div className='w-screen h-[780px] m-0 py-16 px-0 relative group'>
-      {/* Background image */}
-      <div
-        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-        className='w-full h-full bg-center bg-cover duration-500'
-      ></div>
-
-      {/* Left Arrow */}
-      <div
-        onClick={prevSlide}
-        className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-      >
-        <BsChevronCompactLeft size={30} />
-      </div>
-
-      {/* Right Arrow */}
-      <div
-        onClick={nextSlide}
-        className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-      >
-        <BsChevronCompactRight size={30} />
-      </div>
-
-      {/* Dots Navigation */}
-      <div className='flex justify-center py-2'>
-        {slides.map((_, slideIndex) => (
+    <div className="flex flex-col min-h-screen">
+      {/* Slideshow and content */}
+      <div className="flex-grow">
+        <div className="w-screen h-[700px] m-0 px-0 relative group">
+          {/* Background image */}
           <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className={`text-2xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue-500' : 'text-gray-500'}`}
-          >
-            <RxDotFilled />
-          </div>
-        ))}
-      </div>
+            style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+            className="w-full h-full bg-center bg-cover duration-500"
+          ></div>
 
-      <h1>Find your next favorite spot!</h1>
-      <p>Checkout the hidden gems</p>
-      <div id="map" style={{ height: "600px", width: "100%" }}></div>
+          {/* Left Arrow */}
+          <div
+            onClick={prevSlide}
+            className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+          >
+            <BsChevronCompactLeft size={30} />
+          </div>
+
+          {/* Right Arrow */}
+          <div
+            onClick={nextSlide}
+            className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+          >
+            <BsChevronCompactRight size={30} />
+          </div>
+
+          {/* Dots Navigation */}
+          <div className='flex justify-center py-2'>
+            {slides.map((_, slideIndex) => (
+              <div
+                key={slideIndex}
+                onClick={() => goToSlide(slideIndex)}
+                className={`text-2xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue-500' : 'text-gray-500'}`}
+              >
+                <RxDotFilled />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="text-center py-4 mt-10 ">
+          <h1>Find your next favorite spot!</h1>
+          <p>Checkout the hidden gems</p>
+        </div>
+
+        {/* Google Maps */}
+        <div id="map" style={{ height: "700px", width: "100%" }}></div>
+      </div>
     </div>
   );
 }
