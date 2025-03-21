@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { FaHome, FaGlobe, FaFileAlt, FaUsers } from 'react-icons/fa'; // Import icons
+import { FaHome, FaGlobe, FaFileAlt, FaUsers, FaGithub } from 'react-icons/fa';
 
 // Import your page components
 import Home from './pages/Home';
@@ -14,11 +14,11 @@ function App() {
         {/* Navigation - Changed to specific hex color #363636 */}
         <nav className="py-4 shadow-md fixed w-full top-0 z-10" style={{ backgroundColor: '#363636' }}>
           <div className="container mx-auto flex items-center justify-evenly px-4">
-            {/* Logo/Brand */}
-            <div className="flex items-center">
+            {/* Logo/Brand as a homepage link */}
+            <Link to="/" className="flex items-center hover:!text-orange-500">
               <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8 mr-3" />
               <span className="text-white text-xl font-bold">FoodieFind</span>
-            </div>
+            </Link>
             
             {/* Home */}
             <Link to="/" className="!text-white hover:!text-orange-500 flex items-center">
@@ -42,8 +42,8 @@ function App() {
           </div>
         </nav>
 
-        {/* Page content - add margin-top to account for fixed navbar */}
-        <div >
+        {/* Page content - add margin-top to account for fixed navbar and margin-bottom for footer spacing */}
+        <div className="container mx-auto p-4 mt-20 mb-8 flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plan" element={<Plan />} />
