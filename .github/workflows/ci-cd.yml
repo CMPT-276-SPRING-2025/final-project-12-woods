@@ -1,12 +1,13 @@
-name: CI/CD for React with AWS Amplify
+name: CI for FoodieFind
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +18,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './foodiefind/package-lock.json'
 
       - name: Install Dependencies
         working-directory: ./foodiefind
@@ -30,16 +33,7 @@ jobs:
         working-directory: ./foodiefind
         run: npm run build
 
-      # Commented out deployment step (to enable later)
-      # - name: Deploy to AWS Amplify
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_REGION: ${{ secrets.AWS_REGION }}
-      #     AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
-      #   run: |
-      #     aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      #     aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      #     aws configure set region $AWS_REGION
-      #
-      #     aws amplify start-job --app-id $AMPLIFY_APP_ID --branch-name main --job-type RELEASE
+      # We can add tests here when someone implement them
+      # - name: Run Tests
+      #   working-directory: ./foodiefind
+      #   run: npm test
