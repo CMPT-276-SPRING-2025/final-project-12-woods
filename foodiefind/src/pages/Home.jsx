@@ -182,7 +182,7 @@ function Home() {
         </div>
 
         {/* Google Maps */}
-        <div id="map" style={{ height: "700px", width: "100%" }}></div>
+        <div id="map" class="h-[700px] w-1/2 ml-auto"></div>
       </div>
     </div>
   );
