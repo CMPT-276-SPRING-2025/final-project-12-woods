@@ -14,13 +14,6 @@ This platform is designed for both **locals** and **visitors**:
 
 Whether you’re looking for an affordable local favorite or a high-end restaurant that suits your dietary needs, this project aims to make your search easier and more enjoyable.  
 
----
-
-## Team Members  
-- **Ash Aung**
-- **Jim Chen**
-- **Damon Yiu**  
-- **Amir Matianiu** 
 
 ---
 
