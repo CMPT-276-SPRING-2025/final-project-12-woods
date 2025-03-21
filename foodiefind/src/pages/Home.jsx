@@ -3,11 +3,13 @@ import photo1 from '/src/assets/Home-images/Home-food-1.jpg';
 import photo2 from '/src/assets/Home-images/Home-food-2.jpg';
 import photo3 from '/src/assets/Home-images/Home-food-3.jpg';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
-import { RxDotFilled } from 'react-icons/rx';
+import { motion } from 'framer-motion';
+import { TypeAnimation } from 'react-type-animation';
 
 //adding map function
 function loadGoogleMapsAPI() {
   const script = document.createElement("script");
+  // Consider moving this API key to an environment variable for security
   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAZbkQiYGY81HUVJ4dgX9YJZAr_kS_Lvfo&callback=initMap`;
   script.async = true;
   document.head.appendChild(script);
@@ -29,12 +31,17 @@ function loadGoogleMapsAPI() {
         title,
       });
 
-      const infoWindow = new window.google.maps.InfoWindow({
+      const markerInfoWindow = new window.google.maps.InfoWindow({
         content: `<div><h3>${title}</h3><p>Additional information can go here.</p></div>`,
       });
 
       marker.addListener("click", () => {
-        infoWindow.open(map, marker);
+        // Close any previously opened info window
+        if (infoWindow) {
+          infoWindow.close();
+        }
+        markerInfoWindow.open(map, marker);
+        infoWindow = markerInfoWindow;
       });
     });
 
@@ -47,12 +54,16 @@ function loadGoogleMapsAPI() {
           title: placeName,
         });
 
-        infoWindow = new window.google.maps.InfoWindow({
+        const newInfoWindow = new window.google.maps.InfoWindow({
           content: `<div><h3>${placeName}</h3><p>Additional information can go here.</p></div>`,
         });
 
         marker.addListener("click", () => {
-          infoWindow.open(map, marker);
+          if (infoWindow) {
+            infoWindow.close();
+          }
+          newInfoWindow.open(map, marker);
+          infoWindow = newInfoWindow;
         });
 
         // Save marker to local storage
@@ -63,19 +74,84 @@ function loadGoogleMapsAPI() {
         localStorage.setItem("markers", JSON.stringify(savedMarkers));
       }
     });
-
-    map.addListener("click", () => {
-      if (infoWindow) {
-        infoWindow.close();
-      }
-    });
   };
 
   return () => {
-    document.head.removeChild(script);
+    const scriptElement = document.querySelector(`script[src*="maps.googleapis.com"]`);
+    if (scriptElement) {
+      document.head.removeChild(scriptElement);
+    }
     delete window.initMap;
   };
 }
+
+// Fixed FlipLink component borrowed from Hover.Dev
+const DURATION = 0.25;
+const STAGGER = 0.025;
+
+const FlipLink = ({ children, href }) => {
+  // Create an array of characters with spaces preserved
+  const characters = children.split("");
+  
+  return (
+    <motion.a
+      initial="initial"
+      whileHover="hovered"
+      href={href}
+      className="relative block overflow-hidden whitespace-nowrap text-4xl font-black uppercase sm:text-7xl md:text-8xl lg:text-9xl"
+      style={{
+        lineHeight: 1,
+      }}
+    >
+      <div>
+        {characters.map((char, i) => (
+          <motion.span
+            variants={{
+              initial: {
+                y: 0,
+              },
+              hovered: {
+                y: "-100%",
+              },
+            }}
+            transition={{
+              duration: DURATION,
+              ease: "easeInOut",
+              delay: STAGGER * i,
+            }}
+            className="inline-block"
+            key={i}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+      </div>
+      <div className="absolute inset-0">
+        {characters.map((char, i) => (
+          <motion.span
+            variants={{
+              initial: {
+                y: "100%",
+              },
+              hovered: {
+                y: 0,
+              },
+            }}
+            transition={{
+              duration: DURATION,
+              ease: "easeInOut",
+              delay: STAGGER * i,
+            }}
+            className="inline-block"
+            key={i}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+      </div>
+    </motion.a>
+  );
+};
 
 //functionality for slideshow
 function Home() {
@@ -99,7 +175,6 @@ function Home() {
   useEffect(() => {
     if (!isPaused) {
       const intervalId = setInterval(() => {
-        // Move to the next slide automatically
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
@@ -109,6 +184,27 @@ function Home() {
       return () => clearInterval(intervalId);
     }
   }, [currentIndex, slides.length, isPaused]);
+
+  // Effect to handle window resize for map
+  useEffect(() => {
+    const handleResize = () => {
+      const mapElement = document.getElementById("map");
+      if (mapElement && window.google && window.google.maps) {
+        const maps = window.google.maps;
+        const mapInstance = maps.Map.instance ? maps.Map.instance[mapElement.getAttribute("id")] : null;
+        
+        if (mapInstance) {
+          google.maps.event.trigger(mapInstance, 'resize');
+          // Maintain center point after resize
+          const currentCenter = mapInstance.getCenter();
+          mapInstance.setCenter(currentCenter);
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const prevSlide = () => {
     handleUserInteraction(); // Pause auto-sliding when user interacts
@@ -136,53 +232,63 @@ function Home() {
   }, []);
   
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
-      {/* Slideshow and content */}
-      <div className="flex-grow">
-        <div className="w-full h-[700px] m-0 px-0 relative group">
-          {/* Background image */}
-          <div
-            style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-            className="w-full h-full bg-center bg-cover duration-500"
-          ></div>
+    <div className='w-full h-full relative group'>
+      {/* Background image container with fixed aspect ratio */}
+      <div className='w-full aspect-[16/9] relative overflow-hidden'>
+        <div
+          style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+          className='w-full h-full bg-center bg-cover duration-500 absolute inset-0'
+        ></div>
 
-          {/* Left Arrow */}
-          <div
-            onClick={prevSlide}
-            className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-          >
-            <BsChevronCompactLeft size={30} />
-          </div>
-
-          {/* Right Arrow */}
-          <div
-            onClick={nextSlide}
-            className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
-          >
-            <BsChevronCompactRight size={30} />
-          </div>
-
-          {/* Dots Navigation */}
-          <div className='flex justify-center py-2'>
-            {slides.map((_, slideIndex) => (
-              <div
-                key={slideIndex}
-                onClick={() => goToSlide(slideIndex)}
-                className={`text-2xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue-500' : 'text-gray-500'}`}
-              >
-                <RxDotFilled />
-              </div>
-            ))}
-          </div>
+        {/* Text animation with flip effect */}
+        <div className='absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex flex-col items-center'>
+            <FlipLink href="#">Foodie Find</FlipLink>
+            <TypeAnimation
+              sequence={['Discover your inner Foodie', 2000, 'Explore new options', 2000, 'Try new spots never seen before', 2000]}
+              wrapper="p"
+              speed={1}
+              className='mt-8 text-4xl md:text-5xl lg:text-6xl font-bold'
+              repeat={Infinity}
+            />
+        </div>
+        
+        <div
+          onClick={prevSlide}
+          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+        >
+          <BsChevronCompactLeft size={30} />
         </div>
 
-        <div className="text-center py-4 mt-10">
-          <h1>Find your next favorite spot!</h1>
-          <p>Checkout the hidden gems</p>
+        <div
+          onClick={nextSlide}
+          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+        >
+          <BsChevronCompactRight size={30} />
         </div>
 
-        {/* Google Maps */}
-        <div id="map" class="h-[700px] w-1/2 ml-auto"></div>
+        {/* Rectangles Navigation - Positioned near the bottom of the image */}
+        <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center py-2'>
+          {slides.map((_, slideIndex) => (
+            <div
+              key={slideIndex}
+              onClick={() => goToSlide(slideIndex)}
+              className={`cursor-pointer mx-1 ${
+                currentIndex === slideIndex ? 'bg-blue-500' : 'bg-gray-300'
+              }`}
+              style={{ width: '20px', height: '8px', borderRadius: '2px' }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h1 className="text-3xl font-bold">Find your next favorite spot!</h1>
+        <p className="text-xl">Checkout the hidden gems</p>
+        
+        {/* Map container */}
+        <div className="w-full mt-4 relative flex justify-end">
+          <div id="map" className="w-1/2 h-96 md:h-[500px] lg:h-[700px]"></div>
+        </div>
       </div>
     </div>
   );
