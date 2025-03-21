@@ -110,10 +110,10 @@ function Home() {
   }, []);
   
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       {/* Slideshow and content */}
       <div className="flex-grow">
-        <div className="w-screen h-[700px] m-0 px-0 relative group">
+        <div className="w-full h-[700px] m-0 px-0 relative group">
           {/* Background image */}
           <div
             style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
@@ -150,7 +150,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="text-center py-4 mt-10 ">
+        <div className="text-center py-4 mt-10">
           <h1>Find your next favorite spot!</h1>
           <p>Checkout the hidden gems</p>
         </div>
