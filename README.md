@@ -16,14 +16,6 @@ Whether you’re looking for an affordable local favorite or a high-end restaura
 
 ---
 
-## Team Members  
-- **Ash Aung**
-- **Jim Chen**
-- **Damon Yiu**  
-- **Amir Matianiu** 
-
----
-
 ## Key Features  
 1. **Budget Search**: Find restaurants that match your price range.  
 2. **Location-Based Filtering**: Discover dining spots near your area or a specific location.  
