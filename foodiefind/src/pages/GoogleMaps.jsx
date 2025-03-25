@@ -8,7 +8,7 @@ import {
   Circle,
 } from "@react-google-maps/api";
 
-const GOOGLE_MAPS_API_KEY = ""; // Replace with your API key
+const GOOGLE_MAPS_API_KEY = "AIzaSyAMzfBeyQP2K2i-0yDQ-7DCVzRUAprg5vM"; // Replace with your API key
 const libraries = ["places", "geometry"];
 
 const containerStyle = {
@@ -234,20 +234,6 @@ const GoogleMaps = () => {
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
       <div style={{ marginBottom: "10px", display: "flex", gap: "20px" }}>
         <label style={{ display: "flex", alignItems: "center" }}>
-          Your Location:{" "}
-          <Autocomplete
-            onLoad={onUserLocationAutocompleteLoad}
-            onPlaceChanged={onUserLocationChanged}
-            options={{ types: ["geocode"] }}
-          >
-            <input
-              type="text"
-              placeholder="Enter your location"
-              style={{ width: "300px", padding: "5px", marginLeft: "5px" }}
-            />
-          </Autocomplete>
-        </label>
-        <label style={{ display: "flex", alignItems: "center" }}>
           Search Restaurants:{" "}
           <Autocomplete
             onLoad={onRestaurantAutocompleteLoad}
@@ -257,6 +243,20 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Search for a restaurant..."
+              style={{ width: "300px", padding: "5px", marginLeft: "5px" }}
+            />
+          </Autocomplete>
+        </label>
+        <label style={{ display: "flex", alignItems: "center" }}>
+          Your Location:{" "}
+          <Autocomplete
+            onLoad={onUserLocationAutocompleteLoad}
+            onPlaceChanged={onUserLocationChanged}
+            options={{ types: ["geocode"] }}
+          >
+            <input
+              type="text"
+              placeholder="Enter your location"
               style={{ width: "300px", padding: "5px", marginLeft: "5px" }}
             />
           </Autocomplete>
