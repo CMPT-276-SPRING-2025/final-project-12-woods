@@ -4,25 +4,25 @@ const teamMembers = [
   {
     name: "Ash Aung",
     role: "Project Manager, Developer",
-    image: "/src/assets/profiles/Ash.jpg",
+    image: "../src/assets/profiles/Ash.jpg",
     description: "Ash is our project Manager, he is a real party animal",
   },
   {
     name: "Damon Yiu",
     role: "UI Designer, Developer",
-    image: "/src/assets/profiles/Damon.png",
+    image: "../src/assets/profiles/Damon.png",
     description: "Damon is our UI Designer, he likes to speak french",
   },
   {
     name: "Jim Chen",
     role: "QA, Developer",
-    image: "/src/assets/profiles/Jim.jpg",
+    image: "../src/assets/profiles/Jim.jpg",
     description: "Jim is our QA tester, he is a fun guy and a funny guy",
   },
   {
     name: "Amir Matianiu",
     role: "Scrum & GH Manager, Developer",
-    image: "/src/assets/profiles/Amir.jpg",
+    image: "../src/assets/profiles/Amir.jpg",
     description: "Amir is our GH Manager, he can also be funny, sometimes",
   },
 ];

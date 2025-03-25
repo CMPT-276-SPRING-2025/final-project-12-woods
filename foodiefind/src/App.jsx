@@ -17,7 +17,7 @@ function App() {
           <div className="container mx-auto flex items-center justify-evenly px-4">
             {/* Logo/Brand as a homepage link */}
             <Link to="/" className="flex items-center hover:!text-orange-500">
-              <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8 mr-3" />
+              <img src="../src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8 mr-3" />
               <span className="text-white text-xl font-bold">FoodieFind</span>
             </Link>
             
@@ -58,7 +58,7 @@ function App() {
           <div className="container mx-auto flex items-center justify-between px-4">
             {/* Logo/Favicon */}
             <div className="flex items-center">
-              <img src="src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8" />
+              <img src="../src/assets/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8" />
             </div>
             
             <div className="text-white flex flex-col items-center">
