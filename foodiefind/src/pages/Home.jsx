@@ -182,7 +182,7 @@ function Home() {
         
         {/* Map container */}
         <div className="w-full mt-4 relative flex justify-end">
-          <div className="w-1/2 h-96 md:h-[500px] lg:h-[700px]">
+          <div className="w-1/2 h-100 md:h-[500px] lg:h-[700px]">
             <GoogleMaps />
           </div>
         </div>
