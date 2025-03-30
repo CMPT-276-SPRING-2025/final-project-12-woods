@@ -23,22 +23,35 @@ function Plan() {
       // API key remains the same
       const API_KEY = "AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI";
 
-      // Construct prompt (this part is fine)
-      const prompt = `Create a realistic full day meal plan (breakfast, lunch, dinner) for someone in ${location} with a budget of ${budget}.
+      // Improved Prompt for structured Markdown output
+      const prompt = `Create a realistic full-day meal plan (breakfast, lunch, dinner) for someone in ${location} with a budget of ${budget}.
       Dietary restrictions: ${restrictions || 'None'}.
       For each meal, suggest ONLY real, currently operating restaurants in ${location} that you are confident exist.
-      For each restaurant, provide:
-      1. The restaurant's actual name
-      2. Their accurate address
-      3. A dish they're known for that matches any dietary restrictions
-      4. A reasonable price estimate based on current prices
       
-      Format the output using markdown with headers for Breakfast, Lunch, and Dinner.
-      Be factual and only include restaurants you're confident exist in ${location}.`;
+      The output MUST be in the following Markdown format:
 
-      // Updated API endpoint to use the current model name (gemini-1.5-pro instead of gemini-pro)
-      // and updated API version (v1 instead of v1beta)
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI`, {
+      ## Breakfast
+      - **Restaurant Name:** [Restaurant Name 1]
+        - **Address:** [Restaurant Address 1]
+        - **Dish:** [Dish Name 1] (Suitable for: [Dietary Restrictions or "None"])
+        - **Price:** [Price Estimate 1]
+
+      ## Lunch
+      - **Restaurant Name:** [Restaurant Name 2]
+        - **Address:** [Restaurant Address 2]
+        - **Dish:** [Dish Name 2] (Suitable for: [Dietary Restrictions or "None"])
+        - **Price:** [Price Estimate 2]
+
+      ## Dinner
+      - **Restaurant Name:** [Restaurant Name 3]
+        - **Address:** [Restaurant Address 3]
+        - **Dish:** [Dish Name 3] (Suitable for: [Dietary Restrictions or "None"])
+        - **Price:** [Price Estimate 3]
+
+      Be factual and only include restaurants you're confident exist in ${location}. Double-check all information.`;
+
+      // Updated API endpoint to use the current model name
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +79,12 @@ function Plan() {
         throw new Error('No meal plan was generated. Please try again.');
       }
 
-      setMealPlan(generatedText);
+      // Post-processing (Example - you may need more sophisticated handling)
+      const cleanedText = generatedText
+        ? generatedText.replace(/\[.*?\]/g, (match) => match.trim()) // Remove extra spaces within brackets
+        : null;
+
+      setMealPlan(cleanedText);
     } catch (err) {
       console.error('Error generating meal plan:', err);
       setError(err.message || 'Failed to generate meal plan. Please try again.');
