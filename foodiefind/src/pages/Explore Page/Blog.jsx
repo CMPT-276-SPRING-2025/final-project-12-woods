@@ -1,234 +1,320 @@
 import React, { useState, useEffect } from "react";
+import { database } from "./firebase"; 
+import { ref, push, onValue, remove, update } from "firebase/database"; 
 
 function Blog() {
-    const [showForm, setShowForm] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        location: "",
-        link: "",
-        cuisine: "",
-        price: "",
-        hours: "",
-        phone: "",
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    location: "",
+    link: "",
+    cuisine: "",
+    price: "",
+    author: "", 
+  });
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    const restaurantsRef = ref(database, "restaurants");
+    onValue(restaurantsRef, (snapshot) => {
+      const data = snapshot.val();
+      const restaurantsArray = data
+        ? Object.entries(data).map(([id, value]) => ({ id, ...value }))
+        : [];
+      setRestaurants(restaurantsArray);
     });
-    const [restaurants, setRestaurants] = useState(() => {
-        const savedRestaurants = JSON.parse(localStorage.getItem("restaurants")) || [];
-        return savedRestaurants;
-    });
+  }, []);
 
-    useEffect(() => {
-        const savedRestaurants = JSON.parse(localStorage.getItem("restaurants")) || [];
-        setRestaurants(savedRestaurants);
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem("restaurants", JSON.stringify(restaurants));
-    }, [restaurants]);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling
+    }
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup on unmount
     };
+  }, [showForm]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-        // Check if all fields are filled
-        const isFormValid = Object.values(formData).every((value) => value.trim() !== "");
-        if (!isFormValid) {
-            alert("Please fill in all fields before submitting.");
-            return;
-        }
-
-        setRestaurants((prevRestaurants) => [...prevRestaurants, formData]);
-        setFormData({
-            name: "",
-            location: "",
-            link: "",
-            cuisine: "",
-            price: "",
-            hours: "",
-            phone: "",
-        });
-        setShowForm(false);
-    };
-
-    const handleRemove = (indexToRemove) => {
-        setRestaurants((prevRestaurants) =>
-            prevRestaurants.filter((_, index) => index !== indexToRemove)
-        );
-    };
-
-    return (
-        <div>
-            <button
-                onClick={() => setShowForm(true)}
-                className="text-lg text-gray-200 border-gray-300 p-2 
-                text-center block transition-transform duration-300 
-                ease-in-out transform hover:scale-105 hover:bg-blue-600 
-                hover:shadow-2xl rounded-lg text-white border -translate-y-1 shadow-lg"
-            >
-                Add a Restaurant
-            </button>
-            {showForm && (
-                <div className="fixed inset-0 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-xl font-bold mb-4">Add a Restaurant</h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Restaurant Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Location</label>
-                                <select
-                                    name="location"
-                                    value={formData.location}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                >
-                                    <option value="">Select Location</option>
-                                    <option value="Vancouver">Vancouver</option>
-                                    <option value="Surrey">Surrey</option>
-                                    <option value="Burnaby">Burnaby</option>
-                                    <option value="Richmond">Richmond</option>
-                                    <option value="New Westminster">New Westminster</option>
-                                    <option value="Coquitlam">Coquitlam</option>
-                                    <option value="Delta">Delta</option>
-                                    <option value="Langley">Langley</option>
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Link</label>
-                                <input
-                                    type="text"
-                                    name="link"
-                                    value={formData.link}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Cuisine</label>
-                                <select
-                                    name="cuisine"
-                                    value={formData.cuisine}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                >
-                                    <option value="">Select Cuisine</option>
-                                    <option value="italian">Italian</option>
-                                    <option value="american">American</option>
-                                    <option value="korean">Korean</option>
-                                    <option value="vietnamese">Vietnamese</option>
-                                    <option value="middle-eastern">Middle Eastern</option>
-                                    <option value="greek">Greek</option>
-                                    <option value="spanish">Spanish</option>
-                                    <option value="singaporean">Singaporean</option>
-                                    <option value="brazilian">Brazilian</option>
-                                    <option value="caribbean">Caribbean</option>
-                                    <option value="german">German</option>
-                                    <option value="british">British</option>
-                                    <option value="chinese">Chinese</option>
-                                    <option value="japanese">Japanese</option>
-                                    <option value="indian">Indian</option>
-                                    <option value="mexican">Mexican</option>
-                                    <option value="thai">Thai</option>
-                                    <option value="french">French</option>
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Price</label>
-                                <input
-                                    type="text"
-                                    name="price"
-                                    value={formData.price}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Hours</label>
-                                <input
-                                    type="text"
-                                    name="hours"
-                                    value={formData.hours}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700">Contact Phone</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 p-2 rounded"
-                                />
-                            </div>
-                            <div className="flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowForm(false)}
-                                    className="mr-2 px-4 py-2 bg-gray-300 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 mt-6">
-                {restaurants.map((restaurant, index) => (
-                    <div
-                        key={index}
-                        className="p-6 border rounded-xl shadow-lg bg-white text-center transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
-                    >
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">{restaurant.name}</h3>
-                        <p className="text-gray-600 mb-2"><strong>Location:</strong> {restaurant.location}</p>
-                        <p className="text-gray-600 mb-2">
-                            <strong>Link:</strong>{" "}
-                            <a
-                                href={restaurant.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 underline hover:text-blue-700"
-                            >
-                                {restaurant.link}
-                            </a>
-                        </p>
-                        <p className="text-gray-600 mb-2"><strong>Cuisine:</strong> {restaurant.cuisine}</p>
-                        <p className="text-gray-600 mb-2"><strong>Price:</strong> {restaurant.price}</p>
-                        <p className="text-gray-600 mb-2"><strong>Hours:</strong> {restaurant.hours}</p>
-                        <p className="text-gray-600 mb-4"><strong>Contact Phone:</strong> {restaurant.phone}</p>
-                        <button
-                            onClick={() => handleRemove(index)}
-                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                        >
-                            Remove
-                        </button>
-                    </div>
-                ))}
-            </div>
-        </div>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    const isFormValid = Object.values(formData).every(
+      (value) => value.trim() !== ""
     );
+  
+    const isGoogleMapsLink = formData.link.startsWith("https://www.google.com/maps");
+  
+    if (!isFormValid) {
+      alert("Please fill in all fields before submitting.");
+      return;
+    }
+  
+    if (!isGoogleMapsLink) {
+      alert("Please enter a valid Google Maps link.");
+      return;
+    }
+  
+    const restaurantsRef = ref(database, "restaurants");
+    push(restaurantsRef, formData);
+  
+    setFormData({
+      name: "",
+      location: "",
+      link: "",
+      cuisine: "",
+      price: "",
+      author: "",
+    });
+    setShowForm(false);
+  };
+
+  const handleRemove = (idToRemove) => {
+    const restaurantRef = ref(database, `restaurants/${idToRemove}`);
+    remove(restaurantRef);
+  };
+
+  const handleLike = (id) => {
+    const restaurantRef = ref(database, `restaurants/${id}`);
+    const restaurant = restaurants.find((r) => r.id === id);
+
+    if (restaurant.userVote === "like") {
+      // Remove the like
+      const updatedLikes = Math.max((restaurant.likes || 0) - 1, 0);
+      update(restaurantRef, { likes: updatedLikes, userVote: null });
+    } else {
+      // Add the like and remove unlike if it exists
+      const updatedLikes = (restaurant.likes || 0) + 1;
+      const updatedUnlikes = Math.max((restaurant.unlikes || 0) - (restaurant.userVote === "unlike" ? 1 : 0), 0);
+      update(restaurantRef, { likes: updatedLikes, unlikes: updatedUnlikes, userVote: "like" });
+    }
+  };
+
+  const handleUnlike = (id) => {
+    const restaurantRef = ref(database, `restaurants/${id}`);
+    const restaurant = restaurants.find((r) => r.id === id);
+
+    if (restaurant.userVote === "unlike") {
+      // Remove the unlike
+      const updatedUnlikes = Math.max((restaurant.unlikes || 0) - 1, 0);
+      update(restaurantRef, { unlikes: updatedUnlikes, userVote: null });
+    } else {
+      // Add the unlike and remove like if it exists
+      const updatedUnlikes = (restaurant.unlikes || 0) + 1;
+      const updatedLikes = Math.max((restaurant.likes || 0) - (restaurant.userVote === "like" ? 1 : 0), 0);
+      update(restaurantRef, { unlikes: updatedUnlikes, likes: updatedLikes, userVote: "unlike" });
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex justify-center">
+        <button
+          onClick={() => setShowForm(true)}
+          className="text-lg border-gray-300 
+                w-30 h-30 flex items-center justify-center 
+                text-center transition-transform duration-300 
+                ease-in-out transform hover:scale-105 hover:bg-white hover:text-black 
+                hover:shadow-[0_0_10px_5px_rgba(255,255,255,0.5)] rounded-[50%] text-white border shadow-lg"
+        >
+          Add Restaurant
+        </button>
+      </div>
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[600px]">
+            <h2 className="text-xl font-bold mb-4">Add a Restaurant</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700">Restaurant Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Location</label>
+                <select
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Select Location</option>
+                  <option value="Vancouver">Vancouver</option>
+                  <option value="Surrey">Surrey</option>
+                  <option value="Burnaby">Burnaby</option>
+                  <option value="Richmond">Richmond</option>
+                  <option value="New Westminster">New Westminster</option>
+                  <option value="Coquitlam">Coquitlam</option>
+                  <option value="Delta">Delta</option>
+                  <option value="Langley">Langley</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Link</label>
+                <input
+                  type="text"
+                  name="link"
+                  value={formData.link}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Cuisine</label>
+                <select
+                  name="cuisine"
+                  value={formData.cuisine}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Select Cuisine</option>
+                  <option value="American">American</option>
+                  <option value="Brazilian">Brazilian</option>
+                  <option value="British">British</option>
+                  <option value="Caribbean">Caribbean</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Greek">Greek</option>
+                  <option value="Indian">Indian</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Mexican">Mexican</option>
+                  <option value="Middle Eastern">Middle Eastern</option>
+                  <option value="Singaporean">Singaporean</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Thai">Thai</option>
+                  <option value="Vietnamese">Vietnamese</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Price</label>
+                <select
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Select Price</option>
+                  <option value="$">$</option>
+                  <option value="$$">$$</option>
+                  <option value="$$$">$$$</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Author</label>
+                <input
+                  type="text"
+                  name="author"
+                  value={formData.author}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="mr-2 px-4 py-2 bg-gray-300 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-6">
+        {restaurants.map((restaurant) => (
+          <div
+            key={restaurant.id}
+            className="p-6 border rounded-xl shadow-lg bg-black text-white text-center transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50"
+            style={{
+              width: "100%", // Let the width take up the grid cell
+              height: "0", // Maintain a square shape using aspect ratio
+              paddingBottom: "100%", // This will enforce a square ratio for the card
+            }}
+          >
+            <div className="absolute inset-0 flex flex-col justify-between p-6">
+              <div
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "normal",
+                }}
+              >
+                <h3 className="text-xl font-semibold text-white mb-3 break-words">
+                  {restaurant.name}
+                </h3>
+                <p className="text-gray-300 mb-2 break-words">
+                  <strong>Author:</strong> {restaurant.author}
+                </p>
+                <p className="text-gray-300 mb-2 break-words">
+                  <strong>Location:</strong> {restaurant.location}
+                </p>
+                <p className="text-gray-300 mb-2 break-words">
+                  <strong>Cuisine:</strong> {restaurant.cuisine}
+                </p>
+                <p className="text-gray-300 mb-2 break-words">
+                  <strong>Price:</strong> {restaurant.price}
+                </p>
+                <p className="text-gray-300 mb-2 break-words">
+                  <strong>Likes:</strong> {restaurant.likes || 0}
+                </p>
+                <button
+                  onClick={() => window.open(restaurant.link, "_blank")}
+                  className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Visit Link
+                </button>
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <button
+                  onClick={() => handleLike(restaurant.id)}
+                  className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  👍 <span className="ml-2">{restaurant.likes || 0}</span>
+                </button>
+                <button
+                  onClick={() => handleUnlike(restaurant.id)}
+                  className="flex items-center px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                >
+                  👎 <span className="ml-2">{restaurant.unlikes || 0}</span>
+                </button>
+              </div>
+              <button
+                onClick={() => handleRemove(restaurant.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors mt-4"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Blog;

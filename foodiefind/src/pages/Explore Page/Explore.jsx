@@ -32,16 +32,36 @@ function Explore() {
           type="video/mp4"
         ></video>
       </div>
-      <div className="flex flex-col  ">
+      <div className="flex flex-col">
         <div className="gap-4 justify-center items-center m-20">
-          <h2 className="text-white text-6xl mb-10 text-left fade-in">
+          <h2
+            className="text-white text-6xl mb-20 text-center fade-in"
+            style={{
+              position: "sticky",
+              top: "60px", // Adjusted to account for the navigation bar height
+              backgroundColor: "black",
+              zIndex: "1",
+              padding: "20px 0", // Added padding for better space
+              marginTop: "0", // Ensure no margin is applied before sticking
+            }}
+          >
             Explore different cuisines
           </h2>
           <CuisineList />
         </div>
-        <div className="gap-4 justify-center items-center m-20">
-          <h2 className="text-white text-6xl mb-10 text-right fade-in">
-          Save a list of your favourite restaurant
+        <div className="mt-10 m-20">
+          <h2
+            className="text-white text-6xl mb-15 text-center fade-in"
+            style={{
+              position: "sticky",
+              top: "60px", // Adjusted to account for the navigation bar height
+              backgroundColor: "black",
+              zIndex: "1",
+              padding: "20px 0", 
+              marginTop: "0", 
+            }}
+          >
+            Share a restaurant recommendation
           </h2>
           <Blog />
         </div>
