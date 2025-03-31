@@ -387,7 +387,7 @@ const GoogleMaps = () => {
               marginTop: "10px",
               textAlign: "center",
               color: "red",
-              fontWeight: "bold",
+              fontWeight: "lighter",
             }}
           >
             {geoError}
