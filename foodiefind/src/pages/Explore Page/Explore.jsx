@@ -29,7 +29,7 @@ function Explore() {
           autoPlay
           muted
           loop
-          src="/public/Explore.mp4"
+          src="/Explore.mp4"
           type="video/mp4"
         ></video>
       </div>

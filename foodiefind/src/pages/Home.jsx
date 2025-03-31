@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import photo1 from '/public/Home-images/Home-food-1.jpg';
-import photo2 from '/public/Home-images/Home-food-2.jpg';
-import photo3 from '/public/Home-images/Home-food-3.jpg';
+import photo1 from '/Home-images/Home-food-1.jpg';
+import photo2 from '/Home-images/Home-food-2.jpg';
+import photo3 from '/Home-images/Home-food-3.jpg';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
