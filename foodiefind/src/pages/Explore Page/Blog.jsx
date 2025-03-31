@@ -14,6 +14,8 @@ function Blog() {
   });
   const [restaurants, setRestaurants] = useState([]);
 
+  const currentUserId = "currentUser123"; // Replace with actual user ID from authentication
+
   useEffect(() => {
     const restaurantsRef = ref(database, "restaurants");
     onValue(restaurantsRef, (snapshot) => {
@@ -64,7 +66,7 @@ function Blog() {
     }
   
     const restaurantsRef = ref(database, "restaurants");
-    push(restaurantsRef, formData);
+    push(restaurantsRef, { ...formData, userId: currentUserId }); 
   
     setFormData({
       name: "",
@@ -279,9 +281,6 @@ function Blog() {
                 <p className="text-gray-300 mb-2 break-words">
                   <strong>Price:</strong> {restaurant.price}
                 </p>
-                <p className="text-gray-300 mb-2 break-words">
-                  <strong>Likes:</strong> {restaurant.likes || 0}
-                </p>
                 <button
                   onClick={() => window.open(restaurant.link, "_blank")}
                   className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-300 transition-colors"
@@ -292,23 +291,29 @@ function Blog() {
               <div className="flex justify-between items-center mt-4">
                 <button
                   onClick={() => handleLike(restaurant.id)}
-                  className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                    restaurant.userVote === "like" ? "bg-green-600 text-white" : "bg-green-500 text-white hover:bg-green-600"
+                  }`}
                 >
                   👍 <span className="ml-2">{restaurant.likes || 0}</span>
                 </button>
                 <button
                   onClick={() => handleUnlike(restaurant.id)}
-                  className="flex items-center px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                  className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                    restaurant.userVote === "unlike" ? "bg-yellow-600 text-white" : "bg-yellow-500 text-white hover:bg-yellow-600"
+                  }`}
                 >
                   👎 <span className="ml-2">{restaurant.unlikes || 0}</span>
                 </button>
               </div>
-              <button
-                onClick={() => handleRemove(restaurant.id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors mt-4"
-              >
-                Remove
-              </button>
+              {restaurant.userId === currentUserId && (
+                <button
+                  onClick={() => handleRemove(restaurant.id, restaurant.userId)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors mt-4"
+                >
+                  Remove
+                </button>
+              )}
             </div>
           </div>
         ))}

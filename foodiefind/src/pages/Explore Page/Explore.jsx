@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import CuisineList from "./CuisineList";
 import Blog from "./Blog";
+import Dishes from "./Dishes"; // Import the Dishes component
 
 function Explore() {
   const handleScroll = () => {
@@ -38,11 +39,12 @@ function Explore() {
             className="text-white text-6xl mb-20 text-center fade-in"
             style={{
               position: "sticky",
-              top: "60px", // Adjusted to account for the navigation bar height
+              top: "64px", // Adjusted to account for the navigation bar height
               backgroundColor: "black",
               zIndex: "1",
-              padding: "20px 0", // Added padding for better space
-              marginTop: "0", // Ensure no margin is applied before sticking
+              padding: "20px 0",
+              paddingTop: "64px", // Added padding to prevent overlap
+              marginTop: "0",
             }}
           >
             Explore different cuisines
@@ -54,16 +56,34 @@ function Explore() {
             className="text-white text-6xl mb-15 text-center fade-in"
             style={{
               position: "sticky",
-              top: "60px", // Adjusted to account for the navigation bar height
+              top: "64px", // Adjusted to account for the navigation bar height
               backgroundColor: "black",
               zIndex: "1",
-              padding: "20px 0", 
-              marginTop: "0", 
+              padding: "20px 0",
+              paddingTop: "64px", // Added padding to prevent overlap
+              marginTop: "0",
             }}
           >
             Share a restaurant recommendation
           </h2>
           <Blog />
+        </div>
+        <div className="mt-10 m-20">
+          <h2
+            className="text-white text-6xl mb-15 text-center fade-in"
+            style={{
+              position: "sticky",
+              top: "64px", // Adjusted to account for the navigation bar height
+              backgroundColor: "black",
+              zIndex: "1",
+              padding: "20px 0",
+              paddingTop: "64px", // Added padding to prevent overlap
+              marginTop: "0",
+            }}
+          >
+            Start a Food Trend
+          </h2>
+          <Dishes />
         </div>
       </div>
       <style>
