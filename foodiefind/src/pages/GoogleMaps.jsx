@@ -43,6 +43,7 @@ const GoogleMaps = () => {
   const [customPins, setCustomPins] = useState([]);
   // Searched restaurant markers (from the additional restaurant search)
   const [restaurantMarkers, setRestaurantMarkers] = useState([]);
+  const [geoError, setGeoError] = useState(null); // State to track geolocation errors
 
   // Refs for Autocomplete inputs
   const userLocationAutocompleteRef = useRef(null);
@@ -62,9 +63,10 @@ const GoogleMaps = () => {
           setCenter(loc);
           map.panTo(loc);
           fetchNearbyPlaces(loc);
+          setGeoError(null); // Clear any previous error
         },
         () => {
-          alert("Geolocation failed. Using default location.");
+          setGeoError("Geolocation failed. Using default location.");
           setUserLocation(center);
           fetchNearbyPlaces(center);
         }
@@ -377,6 +379,20 @@ const GoogleMaps = () => {
             />
           ))}
         </GoogleMap>
+
+        {/* Display geolocation error message at the bottom */}
+        {geoError && (
+          <div
+            style={{
+              marginTop: "10px",
+              textAlign: "center",
+              color: "red",
+              fontWeight: "bold",
+            }}
+          >
+            {geoError}
+          </div>
+        )}
       </div>
     </LoadScript>
   );
