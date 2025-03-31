@@ -23,32 +23,41 @@ function Plan() {
       // API key remains the same
       const API_KEY = "AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI";
 
-      // Improved Prompt for structured Markdown output
+      // Improved Prompt for structured Markdown output with links
       const prompt = `Create a realistic full-day meal plan (breakfast, lunch, dinner) for someone in ${location} with a budget of ${budget}.
       Dietary restrictions: ${restrictions || 'None'}.
-      For each meal, suggest ONLY real, currently operating restaurants in ${location} that you are confident exist.
-      
+
+      IMPORTANT INSTRUCTIONS:
+      1. Only suggest REAL, currently operating restaurants in ${location} that you are VERY confident exist
+      2. If you're unsure about a restaurant's existence, choose a different well-known restaurant instead
+      3. For Google Maps links, use EXACTLY this format: https://www.google.com/maps/search/?api=1&query=RESTAURANT+NAME+ADDRESS 
+         (replace RESTAURANT+NAME+ADDRESS with the URL-encoded restaurant name and address)
+      4. For website links, use direct URLs to the restaurant's homepage if you know it
+
       The output MUST be in the following Markdown format:
 
       ## Breakfast
       - **Restaurant Name:** [Restaurant Name 1]
         - **Address:** [Restaurant Address 1]
-        - **Dish:** [Dish Name 1] (Suitable for: [Dietary Restrictions or "None"])
+        - **Links:** [Google Maps](https://www.google.com/maps/search/?api=1&query=RESTAURANT+NAME+1+ADDRESS+1) | [Website](https://restaurantwebsite.com) (if available)
+        - **Dish:** [Dish Name 1] (Suitable for: ${restrictions || 'No restrictions'})
         - **Price:** [Price Estimate 1]
 
       ## Lunch
       - **Restaurant Name:** [Restaurant Name 2]
         - **Address:** [Restaurant Address 2]
-        - **Dish:** [Dish Name 2] (Suitable for: [Dietary Restrictions or "None"])
+        - **Links:** [Google Maps](https://www.google.com/maps/search/?api=1&query=RESTAURANT+NAME+2+ADDRESS+2) | [Website](https://restaurant2website.com) (if available)
+        - **Dish:** [Dish Name 2] (Suitable for: ${restrictions || 'No restrictions'})
         - **Price:** [Price Estimate 2]
 
       ## Dinner
       - **Restaurant Name:** [Restaurant Name 3]
         - **Address:** [Restaurant Address 3]
-        - **Dish:** [Dish Name 3] (Suitable for: [Dietary Restrictions or "None"])
+        - **Links:** [Google Maps](https://www.google.com/maps/search/?api=1&query=RESTAURANT+NAME+3+ADDRESS+3) | [Website](https://restaurant3website.com) (if available)
+        - **Dish:** [Dish Name 3] (Suitable for: ${restrictions || 'No restrictions'})
         - **Price:** [Price Estimate 3]
 
-      Be factual and only include restaurants you're confident exist in ${location}. Double-check all information.`;
+      For each restaurant, prioritize accuracy over creativity. Do NOT use shortened URLs or goo.gl links. Use the specific Google Maps format shown above.`;
 
       // Updated API endpoint to use the current model name
       const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
@@ -79,9 +88,28 @@ function Plan() {
         throw new Error('No meal plan was generated. Please try again.');
       }
 
-      // Post-processing (Example - you may need more sophisticated handling)
+      // Enhanced text cleaning function with link fixing
       const cleanedText = generatedText
-        ? generatedText.replace(/\[.*?\]/g, (match) => match.trim()) // Remove extra spaces within brackets
+        ? generatedText
+            .replace(/\[.*?\]/g, (match) => match.trim()) // Clean spaces in brackets
+            // Fix Google Maps links that may be using bad formats
+            .replace(
+              /\(https:\/\/maps\.app\.goo\.gl\/[^)]+\)/g, 
+              (match) => {
+                // Extract restaurant info from surrounding text
+                const prevText = generatedText.substring(Math.max(0, generatedText.indexOf(match) - 100), generatedText.indexOf(match));
+                const restaurantMatch = prevText.match(/\*\*Restaurant Name:\*\* \[(.*?)\]/);
+                const addressMatch = prevText.match(/\*\*Address:\*\* \[(.*?)\]/);
+                
+                if (restaurantMatch && addressMatch) {
+                  const query = `${restaurantMatch[1]} ${addressMatch[1]}`.replace(/ /g, '+');
+                  return `(https://www.google.com/maps/search/?api=1&query=${query})`;
+                }
+                return '(https://www.google.com/maps)'; // Fallback to generic maps link
+              }
+            )
+            .replace(/```markdown|```/g, '') // Remove markdown code block indicators
+            .trim() // Trim extra whitespace
         : null;
 
       setMealPlan(cleanedText);
@@ -184,7 +212,35 @@ function Plan() {
                 <div className="mb-4 text-xs text-gray-500 bg-gray-50 p-2 rounded">
                   Note: Restaurant information is generated by Gemini AI and should be verified before visiting.
                 </div>
-                <ReactMarkdown>{mealPlan}</ReactMarkdown>
+                <ReactMarkdown
+                  components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-orange-500 mt-6 mb-4 border-b border-gray-200 pb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-gray-800" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    a: ({node, children, href, ...props}) => {
+                      const isGoogleMaps = 
+                        href?.includes('maps.google.com') || 
+                        href?.includes('goo.gl') || 
+                        href?.includes('google.com/maps');
+                        
+                      return (
+                        <a
+                          href={href}
+                          className={`underline ${isGoogleMaps 
+                            ? 'text-blue-600 font-medium' 
+                            : 'text-orange-500 font-medium'}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          {...props}
+                        >
+                          {isGoogleMaps ? '📍 ' : '🌐 '}{children}
+                        </a>
+                      );
+                    }
+                  }}
+                >
+                  {mealPlan}
+                </ReactMarkdown>
               </div>
             ) : (
               <div className="text-gray-500 italic text-center h-64 flex items-center justify-center">
