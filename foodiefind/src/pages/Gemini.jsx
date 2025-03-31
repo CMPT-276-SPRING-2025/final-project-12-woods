@@ -44,28 +44,24 @@ function Gemini() {
   };
 
   return (
-    <div className="mx-auto w-1/2 shadow-2xl ">
+    <div className="mx-auto w-full sm:w-3/4 lg:w-1/2 shadow-2xl">
       <div className="bg-white w-full shadow-lg border border-gray-300 rounded-lg overflow-hidden">
-        {/* Logo Header */}
-        <div className="bg-purple-800  text-white p-4 text-center">
-          <div className="text-2xl font-bold">FoodieFind</div>
+        <div className="bg-purple-800 text-white p-4 text-center">
+          <div className="text-lg sm:text-2xl font-bold">FoodieFind</div>
         </div>
-
-        <div className="p-4 h-96 overflow-y-auto">
+        <div className="p-4 h-64 sm:h-96 overflow-y-auto">
           {messages.map((msg, index) => (
             <div key={index} className={`flex ${msg.user ? 'justify-end' : 'justify-start'} mb-2`}>
-              <div className={`rounded-lg p-2 shadow-xl overflow-x-hidden flex flex-wrap ${msg.user ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
-                <ReactMarkdown>
-                  {msg.text}
-                </ReactMarkdown>
+              <div className={`rounded-lg p-2 shadow-xl ${msg.user ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
               </div>
             </div>
           ))}
-            {loading && (
-                <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-                </div>
-            )}
+          {loading && (
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          )}
         </div>
         <div className="p-4 border-t border-gray-200 flex">
           <input
