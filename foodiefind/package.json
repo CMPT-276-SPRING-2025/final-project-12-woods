@@ -13,6 +13,7 @@
     "@react-google-maps/api": "^2.20.6",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.14",
+    "axios": "^1.8.4",
     "framer-motion": "^12.5.0",
     "leaflet": "^1.9.4",
     "react": "^19.0.0",
