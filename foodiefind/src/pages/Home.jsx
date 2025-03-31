@@ -6,6 +6,7 @@ import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import GoogleMaps from './GoogleMaps'; // Import the new GoogleMaps component
+import Gemini from './Gemini'; // Import the new Gemini component
 
 // Fixed FlipLink component borrowed from Hover.Dev
 const DURATION = 0.25;
@@ -177,11 +178,13 @@ function Home() {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold">Find your next favorite spot!</h1>
-        <p className="text-xl">Checkout the hidden gems</p>
+
         
-        {/* Map container */}
-        <div className="w-full mt-4 relative flex justify-end">
+        {/* Map and Chatbot container */}
+        <div className="w-full mt-4 relative flex justify-center">
+          <div className="w-1/2 h-200">
+            <Gemini />
+          </div>
           <div className="w-1/2 h-100 md:h-[500px] lg:h-[700px]">
             <GoogleMaps />
           </div>
