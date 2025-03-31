@@ -5,7 +5,7 @@ import { FaHome, FaGlobe, FaFileAlt, FaUsers, FaGithub } from 'react-icons/fa';
 import Home from './pages/Home';
 import About from './pages/About';
 import Plan from './pages/Plan';
-import Explore from './pages/Explore';
+import Explore from './pages/Explore Page/Explore';
 
 function App() {
   return (
