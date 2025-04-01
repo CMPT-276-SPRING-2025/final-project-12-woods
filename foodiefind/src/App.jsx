@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaFileAlt, FaGlobe, FaUsers, FaGithub } from 'react-icons/fa';
 
 // Import your page components
 import Home from './pages/Home';
@@ -27,17 +27,17 @@ function App() {
               
               {/* Navigation links distributed across center - increased spacing and text size */}
               <div className="flex-1 flex justify-center space-x-24">
-                <Link to="/" className="text-white hover:text-orange-500 transition-colors font-medium text-lg">
-                  Home
+                <Link to="/" className="text-white hover:text-orange-500 transition-colors font-medium text-lg flex items-center">
+                  <FaHome className="mr-2" /> Home
                 </Link>
-                <Link to="/plan" className="text-white hover:text-orange-500 transition-colors font-medium text-lg">
-                  Plan
+                <Link to="/plan" className="text-white hover:text-orange-500 transition-colors font-medium text-lg flex items-center">
+                  <FaFileAlt className="mr-2" /> Plan
                 </Link>
-                <Link to="/explore" className="text-white hover:text-orange-500 transition-colors font-medium text-lg">
-                  Explore
+                <Link to="/explore" className="text-white hover:text-orange-500 transition-colors font-medium text-lg flex items-center">
+                  <FaGlobe className="mr-2" /> Explore
                 </Link>
-                <Link to="/about" className="text-white hover:text-orange-500 transition-colors font-medium text-lg">
-                  About Us
+                <Link to="/about" className="text-white hover:text-orange-500 transition-colors font-medium text-lg flex items-center">
+                  <FaUsers className="mr-2" /> About Us
                 </Link>
               </div>
               
@@ -47,7 +47,7 @@ function App() {
               </div>
             </div>
             
-            {/* Mobile Navigation - Increased text size here too */}
+            {/* Mobile Navigation */}
             <div className="flex md:hidden items-center justify-between">
               <Link to="/" className="flex items-center hover:text-orange-500 z-20">
                 <img src="/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8 mr-2" />
@@ -62,7 +62,7 @@ function App() {
               </button>
             </div>
             
-            {/* Mobile menu overlay - Increased text size */}
+            {/* Mobile menu overlay */}
             <div 
               className={`fixed inset-0 bg-[#363636] z-10 flex flex-col items-center justify-center space-y-8 transition-all duration-300 ease-in-out md:hidden ${
                 isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -70,31 +70,31 @@ function App() {
             >
               <Link 
                 to="/" 
-                className="text-2xl text-white hover:text-orange-500"
+                className="text-2xl text-white hover:text-orange-500 flex items-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Home
+                <FaHome className="mr-3" size={24} /> Home
               </Link>
               <Link 
                 to="/plan" 
-                className="text-2xl text-white hover:text-orange-500"
+                className="text-2xl text-white hover:text-orange-500 flex items-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Plan
+                <FaFileAlt className="mr-3" size={24} /> Plan
               </Link>
               <Link 
                 to="/explore" 
-                className="text-2xl text-white hover:text-orange-500"
+                className="text-2xl text-white hover:text-orange-500 flex items-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Explore
+                <FaGlobe className="mr-3" size={24} /> Explore
               </Link>
               <Link 
                 to="/about" 
-                className="text-2xl text-white hover:text-orange-500"
+                className="text-2xl text-white hover:text-orange-500 flex items-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                About Us
+                <FaUsers className="mr-3" size={24} /> About Us
               </Link>
             </div>
           </div>
@@ -116,16 +116,18 @@ function App() {
             <div className="flex items-center mb-4 sm:mb-0">
               <img src="/Foodie.png" alt="FoodieFind Logo" className="h-8 w-8" />
             </div>
-            <div className="text-center sm:text-left">
-              <p>© 2025 FoodieFind. All rights reserved.</p>
+            <div className="text-center flex flex-col items-center">
+              <p>© 2025 FoodieFind.</p>
+              <p className="text-xs mt-1">All rights reserved.</p>
             </div>
             <a
               href="https://github.com/CMPT-276-SPRING-2025/final-project-12-woods"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:text-orange-500"
+              aria-label="GitHub Repository"
             >
-              GitHub
+              <FaGithub size={24} />
             </a>
           </div>
         </footer>
