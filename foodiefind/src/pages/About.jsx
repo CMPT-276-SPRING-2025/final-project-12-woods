@@ -22,7 +22,7 @@ const teamMembers = [
   {
     name: "Amir Matianiu",
     role: "Scrum & GH Manager, Developer",
-    image: "/profiles/Amir.jpg",
+    image: "/profiles/Amir.jpg", // Ensure this path is correct
     description: "Amir is our GH Manager, he can also be funny, sometimes",
   },
 ];

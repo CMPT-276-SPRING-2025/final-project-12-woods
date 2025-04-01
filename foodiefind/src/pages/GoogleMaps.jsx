@@ -234,9 +234,9 @@ const GoogleMaps = () => {
 
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
-      <div style={{ marginBottom: "10px", display: "flex", gap: "20px" }}>
-        <label style={{ display: "flex", alignItems: "center" }}>
-          Search Restaurants:{" "}
+      <div className="flex flex-col sm:flex-row gap-4 mb-4 px-4">
+        <label className="flex flex-col sm:flex-row items-center">
+          <span className="text-sm sm:text-base">Search Restaurants:</span>
           <Autocomplete
             onLoad={onRestaurantAutocompleteLoad}
             onPlaceChanged={onRestaurantPlaceChanged}
@@ -245,12 +245,12 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Search for a restaurant..."
-              style={{ width: "300px", padding: "5px", marginLeft: "5px" }}
+              className="border rounded-md p-2 w-full sm:w-64 mt-2 sm:mt-0 sm:ml-2"
             />
           </Autocomplete>
         </label>
-        <label style={{ display: "flex", alignItems: "center" }}>
-          Your Location:{" "}
+        <label className="flex flex-col sm:flex-row items-center">
+          <span className="text-sm sm:text-base">Your Location:</span>
           <Autocomplete
             onLoad={onUserLocationAutocompleteLoad}
             onPlaceChanged={onUserLocationChanged}
@@ -259,7 +259,7 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Enter your location"
-              style={{ width: "300px", padding: "5px", marginLeft: "5px" }}
+              className="border rounded-md p-2 w-full sm:w-64 mt-2 sm:mt-0 sm:ml-2"
             />
           </Autocomplete>
         </label>
@@ -279,26 +279,15 @@ const GoogleMaps = () => {
         </div>
       </div>
 
-      <div style={{ position: "relative" }}>
+      <div className="relative w-full h-[300px] sm:h-[500px]">
         {loadingPlaces && (
-          <div
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 10,
-              background: "rgba(255,255,255,0.9)",
-              padding: "10px",
-              borderRadius: "5px",
-            }}
-          >
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-md shadow-md z-10">
             Loading places...
           </div>
         )}
 
         <GoogleMap
-          mapContainerStyle={containerStyle}
+          mapContainerClassName="w-full h-full"
           center={center}
           zoom={14}
           onLoad={onMapLoad}

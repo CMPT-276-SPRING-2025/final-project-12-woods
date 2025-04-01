@@ -128,26 +128,23 @@ function Home() {
   };
   
   return (
-    <div className='w-full h-full relative group'>
-      {/* Background image container with fixed aspect ratio */}
-      <div className='w-full aspect-[16/9] relative overflow-hidden'>
+    <div className="w-full h-full relative group">
+      <div className="w-full aspect-[16/9] relative overflow-hidden">
         <div
           style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-          className='w-full h-full bg-center bg-cover duration-500 absolute inset-0'
+          className="w-full h-full bg-center bg-cover duration-500 absolute inset-0"
         ></div>
-
-        {/* Text animation with flip effect */}
-        <div className='absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex flex-col items-center'>
-            <FlipLink href="#">Foodie Find</FlipLink>
-            <TypeAnimation
-              sequence={['Discover your inner Foodie', 2000, 'Explore new options', 2000, 'Try new spots never seen before', 2000]}
-              wrapper="p"
-              speed={1}
-              className='mt-8 text-4xl md:text-5xl lg:text-6xl font-bold'
-              repeat={Infinity}
-            />
+        <div className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex flex-col items-center">
+          <FlipLink href="#">Foodie Find</FlipLink>
+          <TypeAnimation
+            sequence={['Discover your inner Foodie', 2000, 'Explore new options', 2000, 'Try new spots never seen before', 2000]}
+            wrapper="p"
+            speed={1}
+            className="mt-8 text-lg sm:text-2xl md:text-4xl font-bold text-center"
+            repeat={Infinity}
+          />
         </div>
-        
+
         <div
           onClick={prevSlide}
           className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
@@ -177,17 +174,12 @@ function Home() {
         </div>
       </div>
 
-      <div>
-
-        
-        {/* Map and Chatbot container */}
-        <div className="w-full mt-4 relative flex justify-center">
-          <div className="w-1/2 h-200">
-            <Gemini />
-          </div>
-          <div className="w-1/2 h-100 md:h-[500px] lg:h-[700px]">
-            <GoogleMaps />
-          </div>
+      <div className="flex flex-col md:flex-row gap-4 mt-4 px-4">
+        <div className="w-full md:w-1/2">
+          <Gemini />
+        </div>
+        <div className="w-full md:w-1/2">
+          <GoogleMaps />
         </div>
       </div>
     </div>

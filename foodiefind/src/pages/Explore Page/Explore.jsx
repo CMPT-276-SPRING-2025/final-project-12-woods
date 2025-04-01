@@ -22,7 +22,7 @@ function Explore() {
   }, []);
 
   return (
-    <div className="bg-black">
+    <div className="bg-black overflow-hidden">
       <div>
         <video
           className="w-full h-auto"
@@ -34,9 +34,9 @@ function Explore() {
         ></video>
       </div>
       <div className="flex flex-col">
-        <div className="gap-4 justify-center items-center m-20">
+        <div className="gap-4 justify-center items-center m-5 sm:m-10">
           <h2
-            className="text-white text-6xl mb-20 text-center fade-in"
+            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
@@ -51,9 +51,9 @@ function Explore() {
           </h2>
           <CuisineList />
         </div>
-        <div className="mt-10 m-20">
+        <div className="mt-10 m-5 sm:m-10">
           <h2
-            className="text-white text-6xl mb-15 text-center fade-in"
+            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
@@ -68,9 +68,9 @@ function Explore() {
           </h2>
           <Blog />
         </div>
-        <div className="mt-10 m-20">
+        <div className="mt-10 m-5 sm:m-10">
           <h2
-            className="text-white text-6xl mb-15 text-center fade-in"
+            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
