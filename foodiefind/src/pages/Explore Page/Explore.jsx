@@ -22,25 +22,25 @@ function Explore() {
   }, []);
 
   return (
-    <div className="bg-black overflow-hidden">
+    <div className="bg-white overflow-hidden">
       <div>
         <video
           className="w-full h-auto"
           autoPlay
           muted
           loop
-          src="/Explore.mp4"
+          src="/explorevideo.mp4"
           type="video/mp4"
         ></video>
       </div>
       <div className="flex flex-col">
         <div className="gap-4 justify-center items-center m-5 sm:m-10">
           <h2
-            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
+            className="text-black text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
-              backgroundColor: "black",
+              backgroundColor: "white",
               zIndex: "1",
               padding: "20px 0",
               paddingTop: "64px", // Added padding to prevent overlap
@@ -53,11 +53,11 @@ function Explore() {
         </div>
         <div className="mt-10 m-5 sm:m-10">
           <h2
-            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
+            className="text-black text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
-              backgroundColor: "black",
+              backgroundColor: "white",
               zIndex: "1",
               padding: "20px 0",
               paddingTop: "64px", // Added padding to prevent overlap
@@ -70,11 +70,11 @@ function Explore() {
         </div>
         <div className="mt-10 m-5 sm:m-10">
           <h2
-            className="text-white text-4xl sm:text-6xl mb-10 text-center fade-in"
+            className="text-black text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
               position: "sticky",
               top: "64px", // Adjusted to account for the navigation bar height
-              backgroundColor: "black",
+              backgroundColor: "white",
               zIndex: "1",
               padding: "20px 0",
               paddingTop: "64px", // Added padding to prevent overlap
