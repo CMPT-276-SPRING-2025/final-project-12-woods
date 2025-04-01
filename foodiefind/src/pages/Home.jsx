@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import photo1 from '/Home-images/Home-food-1.jpg';
 import photo2 from '/Home-images/Home-food-2.jpg';
 import photo3 from '/Home-images/Home-food-3.jpg';
@@ -86,7 +86,12 @@ function Home() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  
+  const chatAndMapRef = useRef(null); // Ref for the chatbot and maps section
+
+  const handleScrollToFeatures = () => {
+    chatAndMapRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   // Function to handle user interaction and pause auto-sliding
   const handleUserInteraction = () => {
     setIsPaused(true);
@@ -143,24 +148,30 @@ function Home() {
             className="mt-8 text-lg sm:text-2xl md:text-4xl font-bold text-center"
             repeat={Infinity}
           />
+          <button
+            onClick={handleScrollToFeatures}
+            className="mt-8 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105"
+          >
+            Click to Find
+          </button>
         </div>
 
         <div
           onClick={prevSlide}
-          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+          className="hidden group-hover:flex absolute top-[50%] -translate-y-1/2 left-5 text-2xl rounded-full p-3 bg-black/30 text-white cursor-pointer hover:bg-black/50 transition-all duration-300"
         >
           <BsChevronCompactLeft size={30} />
         </div>
 
         <div
           onClick={nextSlide}
-          className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'
+          className="hidden group-hover:flex absolute top-[50%] -translate-y-1/2 right-5 text-2xl rounded-full p-3 bg-black/30 text-white cursor-pointer hover:bg-black/50 transition-all duration-300"
         >
           <BsChevronCompactRight size={30} />
         </div>
 
         {/* Rectangles Navigation - Positioned near the bottom of the image */}
-        <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center py-2'>
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center py-2">
           {slides.map((_, slideIndex) => (
             <div
               key={slideIndex}
@@ -174,7 +185,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 mt-4 px-4">
+      <div ref={chatAndMapRef} className="flex flex-col md:flex-row gap-4 mt-20 mb-20 px-4">
         <div className="w-full md:w-1/2">
           <Gemini />
         </div>
