@@ -17,28 +17,37 @@ function Gemini() {
 
       try {
         setLoading(true);
+
+        // Build the conversation history as a single string
+        const conversationHistory = newMessages
+          .map((msg) => (msg.user ? `User: ${msg.text}` : `Bot: ${msg.text}`))
+          .join('\n');
+
         const response = await axios.post(
           'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyArPM7lrMXJlMJsHHVJEq08IpYPiX_hCmA',
           {
-            "contents": [
+            contents: [
               {
-                "parts": [
+                parts: [
                   {
-                    "text": input
-                  }
-                ]
-              }
-            ]
+                    text: `${conversationHistory}\nUser: ${input}\nBot:`,
+                  },
+                ],
+              },
+            ],
           }
         );
-        console.log(response);
+
         const botResponse = response.data.candidates[0].content.parts[0].text;
         setLoading(false);
         setMessages([...newMessages, { text: botResponse, user: false }]);
       } catch (error) {
         console.error('Error sending message:', error);
         setLoading(false);
-        setMessages([...newMessages, { text: 'Error: Could not get response from AI', user: false }]);
+        setMessages([
+          ...newMessages,
+          { text: 'Error: Could not get response from AI', user: false },
+        ]);
       }
     }
   };
