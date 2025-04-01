@@ -84,7 +84,9 @@ return (
                 href={cuisine.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-lg text-gray-200 border-gray-300 p-4 text-center block transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-600 hover:shadow-2xl rounded-lg text-white border -translate-y-1 shadow-lg"
+                className="text-lg text-black border border-black p-4 text-center block transition-transform duration-300 
+                ease-in-out transform hover:scale-105 hover:bg-blue-600 hover:shadow-2xl rounded-lg -translate-y-1 
+                shadow-lg"
             >
                 <div className="flex flex-col items-center">
                     <span>{cuisine.name}</span>
