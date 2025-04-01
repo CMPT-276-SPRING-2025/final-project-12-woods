@@ -234,9 +234,19 @@ const GoogleMaps = () => {
 
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
-      <div className="flex flex-col sm:flex-row gap-4 mb-4 px-4">
-        <label className="flex flex-col sm:flex-row items-center">
-          <span className="text-sm sm:text-base">Search Restaurants:</span>
+      <div className="flex flex-col sm:flex-row items-center gap-4 mb-4 px-4">
+        <label className="flex items-center gap-2">
+          <span className="text-sm sm:text-base font-medium text-gray-700">Radius (km):</span>
+          <input
+            type="number"
+            min="1"
+            value={(radius / 1000).toString()}
+            onChange={handleRadiusInputChange}
+            className="border border-gray-300 rounded-md p-2 w-20 text-center focus:ring-2 focus:ring-orange-500 focus:outline-none"
+          />
+        </label>
+        <label className="flex items-center gap-2">
+          <span className="text-sm sm:text-base font-medium text-gray-700">Search Restaurants:</span>
           <Autocomplete
             onLoad={onRestaurantAutocompleteLoad}
             onPlaceChanged={onRestaurantPlaceChanged}
@@ -245,12 +255,12 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Search for a restaurant..."
-              className="border rounded-md p-2 w-full sm:w-64 mt-2 sm:mt-0 sm:ml-2"
+              className="border border-gray-300 rounded-md p-2 w-64 focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
         </label>
-        <label className="flex flex-col sm:flex-row items-center">
-          <span className="text-sm sm:text-base">Your Location:</span>
+        <label className="flex items-center gap-2">
+          <span className="text-sm sm:text-base font-medium text-gray-700">Your Location:</span>
           <Autocomplete
             onLoad={onUserLocationAutocompleteLoad}
             onPlaceChanged={onUserLocationChanged}
@@ -259,26 +269,11 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Enter your location"
-              className="border rounded-md p-2 w-full sm:w-64 mt-2 sm:mt-0 sm:ml-2"
+              className="border border-gray-300 rounded-md p-2 w-64 focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
         </label>
       </div>
-      <div style={{ marginBottom: "10px" }}>
-        <div>
-          <span>
-            Radius (km):{" "}
-            <input
-              type="number"
-              min="1"
-              value={(radius / 1000).toString()}
-              onChange={handleRadiusInputChange}
-              style={{ width: "60px", margin: "0 5px" }}
-            />
-          </span>
-        </div>
-      </div>
-
       <div className="relative w-full h-[300px] sm:h-[500px]">
         {loadingPlaces && (
           <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-md shadow-md z-10">
