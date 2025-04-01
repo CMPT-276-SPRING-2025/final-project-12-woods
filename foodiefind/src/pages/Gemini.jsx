@@ -46,7 +46,8 @@ function Gemini() {
   return (
     <div className="mx-auto w-full sm:w-3/4 lg:w-1/2 shadow-2xl">
       <div className="bg-white w-full shadow-lg border border-gray-300 rounded-lg overflow-hidden">
-        <div className="bg-purple-800 text-white p-4 text-center">
+        {/* Changed from bg-purple-800 to bg-orange-500 */}
+        <div className="bg-orange-500 text-white p-4 text-center">
           <div className="text-lg sm:text-2xl font-bold">FoodieFind</div>
         </div>
         <div className="p-4 h-64 sm:h-96 overflow-y-auto">
