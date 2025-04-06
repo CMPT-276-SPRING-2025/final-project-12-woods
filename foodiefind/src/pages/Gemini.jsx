@@ -17,28 +17,39 @@ function Gemini() {
 
       try {
         setLoading(true);
+
+        // Build the conversation history as a single string
+        const conversationHistory = newMessages
+          .map((msg) => (msg.user ? `User: ${msg.text}` : `Bot: ${msg.text}`))
+          .join('\n');
+
+        // Send the conversation history and the user's latest input to the API
         const response = await axios.post(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyArPM7lrMXJlMJsHHVJEq08IpYPiX_hCmA',
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI',
           {
-            "contents": [
+            contents: [
               {
-                "parts": [
+                parts: [
                   {
-                    "text": input
-                  }
-                ]
-              }
-            ]
+                    text: `${conversationHistory}\nUser: ${input}\nBot:`,
+                  },
+                ],
+              },
+            ],
           }
         );
-        console.log(response);
+
+        // Extract the bot's response from the API response
         const botResponse = response.data.candidates[0].content.parts[0].text;
         setLoading(false);
         setMessages([...newMessages, { text: botResponse, user: false }]);
       } catch (error) {
         console.error('Error sending message:', error);
         setLoading(false);
-        setMessages([...newMessages, { text: 'Error: Could not get response from AI', user: false }]);
+        setMessages([
+          ...newMessages,
+          { text: 'Error: Could not get response from AI', user: false },
+        ]);
       }
     }
   };
@@ -46,7 +57,6 @@ function Gemini() {
   return (
     <div className="mx-auto w-full sm:w-3/4 lg:w-1/2 shadow-2xl">
       <div className="bg-white w-full shadow-lg border border-gray-300 rounded-lg overflow-hidden">
-        {/* Changed from bg-purple-800 to bg-orange-500 */}
         <div className="bg-orange-500 text-white p-4 text-center">
           <div className="text-lg sm:text-2xl font-bold">FoodieFind</div>
         </div>
