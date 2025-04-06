@@ -92,7 +92,7 @@ describe('GoogleMaps Component', () => {
 
   it('handles restaurant search input', () => {
     render(<GoogleMaps />);
-    const restaurantInput = screen.getByPlaceholderText(/search for a restaurant/i);
+    const restaurantInput = screen.getByPlaceholderText(/search for any restaurant/i);
     fireEvent.change(restaurantInput, { target: { value: 'Pizza Place' } });
     expect(restaurantInput.value).toBe('Pizza Place');
   });
