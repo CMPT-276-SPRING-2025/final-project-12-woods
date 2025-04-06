@@ -47,8 +47,25 @@ const GoogleMaps = () => {
 
   // Refs for Autocomplete inputs
   const userLocationAutocompleteRef = useRef(null);
-  const foodAutocompleteRef = useRef(null);
   const restaurantAutocompleteRef = useRef(null);
+
+  // Remove legacy warning, since google maps has been updated March 1, 2025
+  useEffect(() => {
+    const originalWarn = console.warn;
+    const originalError = console.error;
+    console.warn = (...args) => {
+      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
+      originalWarn(...args);
+    };
+    console.error = (...args) => {
+      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
+      originalError(...args);
+    };
+    return () => {
+      console.warn = originalWarn;
+      console.error = originalError;
+    };
+  }, []);
 
   // On map load, get user location and fetch nearby places
   useEffect(() => {
@@ -150,6 +167,7 @@ const GoogleMaps = () => {
         setUserLocation(newLoc);
         setCenter(newLoc);
         map.panTo(newLoc);
+        setRadius(1000); // Reset radius to 1km when location changes
         fetchNearbyPlaces(newLoc);
       } else {
         //alert("No details available for the selected location.");
@@ -213,15 +231,6 @@ const GoogleMaps = () => {
     }
   };
 
-  // Simple hover logic: on mouse over, show info; on mouse out, hide info immediately.
-  const handleMarkerMouseOver = (place) => {
-    setHoveredPlace(place);
-  };
-
-  const handleMarkerMouseOut = () => {
-    setHoveredPlace(null);
-  };
-
   // Returns an emoji label based on rating for nearby places.
   const getMarkerLabel = (place) => {
     if (place.rating) {
@@ -234,18 +243,8 @@ const GoogleMaps = () => {
 
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
-      <div className="flex flex-col sm:flex-row items-center gap-4 mb-4 px-4">
-        <label className="flex items-center gap-2">
-          <span className="text-sm sm:text-base font-medium text-gray-700">Radius (km):</span>
-          <input
-            type="number"
-            min="1"
-            value={(radius / 1000).toString()}
-            onChange={handleRadiusInputChange}
-            className="border border-gray-300 rounded-md p-2 w-20 text-center focus:ring-2 focus:ring-orange-500 focus:outline-none"
-          />
-        </label>
-        <label className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-4 mb-4 px-4">
+        <label className="flex items-center gap-2 flex-1">
           <span className="text-sm sm:text-base font-medium text-gray-700">Search Restaurants:</span>
           <Autocomplete
             onLoad={onRestaurantAutocompleteLoad}
@@ -254,12 +253,12 @@ const GoogleMaps = () => {
           >
             <input
               type="text"
-              placeholder="Search for a restaurant..."
-              className="border border-gray-300 rounded-md p-2 w-64 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              placeholder="Search for any restaurant..."
+              className="border border-gray-300 rounded-md p-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 flex-1">
           <span className="text-sm sm:text-base font-medium text-gray-700">Your Location:</span>
           <Autocomplete
             onLoad={onUserLocationAutocompleteLoad}
@@ -269,11 +268,28 @@ const GoogleMaps = () => {
             <input
               type="text"
               placeholder="Enter your location"
-              className="border border-gray-300 rounded-md p-2 w-64 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="border border-gray-300 rounded-md p-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
         </label>
+        <label className="flex items-center gap-2 flex-1">
+          <span className="text-sm sm:text-base font-medium text-gray-700">Radius (km):</span>
+          <input
+            type="number"
+            min="1"
+            value={(radius / 1000).toString()}
+            onChange={handleRadiusInputChange}
+            className="border border-gray-300 rounded-md p-2 w-full max-w-[80px] text-center focus:ring-2 focus:ring-orange-500 focus:outline-none"
+          />
+        </label>
       </div>
+
+      {/* Add a message to inform the user */}
+      <div className="flex justify-between text-gray-600 text-sm mb-2 px-4">
+        <span>1. Click on a pin to view more details.</span>
+        <span>2. Click anywhere on the map to drop a custom pin with an emoji.</span>
+      </div>
+
       <div className="relative w-full h-[300px] sm:h-[500px]">
         {loadingPlaces && (
           <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-md shadow-md z-10">
@@ -314,8 +330,7 @@ const GoogleMaps = () => {
                 lng: place.geometry.location.lng(),
               }}
               label={{ text: getMarkerLabel(place), fontSize: "24px" }}
-              onMouseOver={() => handleMarkerMouseOver(place)}
-              onMouseOut={handleMarkerMouseOut}
+              onClick={() => setHoveredPlace(place)} // Open InfoWindow on marker click
             />
           ))}
 
@@ -325,32 +340,48 @@ const GoogleMaps = () => {
               key={marker.id}
               position={marker.position}
               label={{ text: "🤤", fontSize: "24px" }}
-              onMouseOver={() => setHoveredPlace(marker)}
-              onMouseOut={() => setHoveredPlace(null)}
+              onClick={() => setHoveredPlace(marker)} // Open InfoWindow on marker click
             />
           ))}
 
           {/* InfoWindow for hovered marker */}
           {hoveredPlace && (
-           <InfoWindow
-           position={{
-             lat: hoveredPlace.geometry
-               ? hoveredPlace.geometry.location.lat()
-               : hoveredPlace.position.lat,
-             lng: hoveredPlace.geometry
-               ? hoveredPlace.geometry.location.lng()
-               : hoveredPlace.position.lng,
-           }}
-           onCloseClick={() => setHoveredPlace(null)}
-           options={{ pixelOffset: new window.google.maps.Size(0, -40) }}
-         >
-           <div style={{ pointerEvents: "none" }}>
-             <h4>{hoveredPlace.name || "Restaurant"}</h4>
-             <p>{hoveredPlace.vicinity || ""}</p>
-             {hoveredPlace.rating && <p>Rating: {hoveredPlace.rating}</p>}
-           </div>
-         </InfoWindow>
-         
+            <InfoWindow
+              position={{
+                lat: hoveredPlace.geometry
+                  ? hoveredPlace.geometry.location.lat()
+                  : hoveredPlace.position.lat,
+                lng: hoveredPlace.geometry
+                  ? hoveredPlace.geometry.location.lng()
+                  : hoveredPlace.position.lng,
+              }}
+              onCloseClick={() => setHoveredPlace(null)}
+              options={{ pixelOffset: new window.google.maps.Size(0, -40) }}
+            >
+              <div>
+                <h4>{hoveredPlace.name || "Restaurant"}</h4>
+                <p>{hoveredPlace.vicinity || ""}</p>
+                {hoveredPlace.rating && (
+                  <p>
+                    Rating: {hoveredPlace.rating} ⭐
+                  </p>
+                )}
+                {hoveredPlace.place_id && (
+                  <a
+                    href={`https://www.google.com/maps/place/?q=place_id:${hoveredPlace.place_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#4285F4",
+                      textDecoration: "underline",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    View on Google Maps
+                  </a>
+                )}
+              </div>
+            </InfoWindow>
           )}
 
           {/* Custom pin markers as emojis */}
