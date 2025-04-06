@@ -291,7 +291,7 @@ const GoogleMaps = () => {
           {userLocation && (
             <Marker
               position={userLocation}
-              icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+              icon="https://maps.google.com/mapfiles/ms/icons/green-dot.png"
             />
           )}
 
