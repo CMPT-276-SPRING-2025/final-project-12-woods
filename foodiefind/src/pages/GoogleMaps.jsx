@@ -303,6 +303,7 @@ const GoogleMaps = () => {
           zoom={14}
           onLoad={onMapLoad}
           onClick={handleMapClick}
+          options={{ clickableIcons: false }} // added option to disable default POI clicks
         >
           {/* User location marker */}
           {userLocation && (
