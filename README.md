@@ -25,7 +25,6 @@ Make sure you have **Node.js (v14 or higher)** and **npm** installed on your sys
 
 To verify installation, run the following in your terminal:
 
-```bash
 node -v
 npm -v
 
