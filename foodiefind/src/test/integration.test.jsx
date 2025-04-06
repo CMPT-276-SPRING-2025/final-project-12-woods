@@ -163,7 +163,7 @@ describe('Integration Tests', () => {
     it('handles restaurant search input', async () => {
       render(<GoogleMaps />);
       
-      const searchInput = screen.getByPlaceholderText(/search for a restaurant/i);
+      const searchInput = screen.getByPlaceholderText(/search for any restaurant/i);
       fireEvent.change(searchInput, { target: { value: 'Pizza' } });
       
       // Just verify the input value changes
