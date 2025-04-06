@@ -147,7 +147,7 @@ describe('Integration Tests', () => {
       // Check for essential map elements
       expect(screen.getByTestId('google-map')).toBeInTheDocument();
       expect(screen.getByRole('spinbutton', { name: /radius/i })).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/search for a restaurant/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search for any restaurant/i)).toBeInTheDocument();
     });
 
     it('handles radius input changes', async () => {
