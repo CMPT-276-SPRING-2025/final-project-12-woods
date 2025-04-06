@@ -2,7 +2,20 @@ import React, { useState, useEffect } from "react";
 import { database } from "./firebase"; 
 import { ref, push, onValue, remove, update } from "firebase/database"; 
 
+// Generate or retrieve a unique identifier for the current user
+const getCurrentUserId = () => {
+  let userId = localStorage.getItem("creatorId");
+  if (!userId) {
+    userId = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("creatorId", userId);
+  }
+  return userId;
+};
+
+const currentUserId = getCurrentUserId(); // Use this as the creatorId
+
 function Blog() {
+  
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -13,8 +26,6 @@ function Blog() {
     author: "", 
   });
   const [restaurants, setRestaurants] = useState([]);
-
-  const currentUserId = "currentUser123"; // Replace with actual user ID from authentication
 
   useEffect(() => {
     const restaurantsRef = ref(database, "restaurants");
@@ -53,7 +64,7 @@ function Blog() {
       (value) => value.trim() !== ""
     );
   
-    const isGoogleMapsLink = formData.link.startsWith("https://www.google.com/maps");
+    const isGoogleMapsLink = /^https:\/\/(www\.)?google\.[a-z]+\/maps/.test(formData.link);
   
     if (!isFormValid) {
       alert("Please fill in all fields before submitting.");
@@ -66,7 +77,7 @@ function Blog() {
     }
   
     const restaurantsRef = ref(database, "restaurants");
-    push(restaurantsRef, { ...formData, userId: currentUserId }); 
+    push(restaurantsRef, { ...formData, userId: currentUserId, creatorId: currentUserId }); 
   
     setFormData({
       name: "",
@@ -79,45 +90,92 @@ function Blog() {
     setShowForm(false);
   };
 
-  const handleRemove = (idToRemove) => {
-    const restaurantRef = ref(database, `restaurants/${idToRemove}`);
-    remove(restaurantRef);
+  const handleRemove = (idToRemove, creatorId) => {
+    if (creatorId !== currentUserId) {
+      alert("You can only delete your own blog posts.");
+      return;
+    }
+    const blogRef = ref(database, `blogs/${idToRemove}`);
+    remove(blogRef);
   };
 
   const handleLike = (id) => {
     const restaurantRef = ref(database, `restaurants/${id}`);
     const restaurant = restaurants.find((r) => r.id === id);
-
-    if (restaurant.userVote === "like") {
+  
+    const userVotes = restaurant.userVotes || {};
+    const currentUserVote = userVotes[currentUserId];
+  
+    if (currentUserVote === "like") {
       // Remove the like
       const updatedLikes = Math.max((restaurant.likes || 0) - 1, 0);
-      update(restaurantRef, { likes: updatedLikes, userVote: null });
+      delete userVotes[currentUserId];
+      update(restaurantRef, { likes: updatedLikes, userVotes });
     } else {
       // Add the like and remove unlike if it exists
       const updatedLikes = (restaurant.likes || 0) + 1;
-      const updatedUnlikes = Math.max((restaurant.unlikes || 0) - (restaurant.userVote === "unlike" ? 1 : 0), 0);
-      update(restaurantRef, { likes: updatedLikes, unlikes: updatedUnlikes, userVote: "like" });
+      const updatedUnlikes = Math.max((restaurant.unlikes || 0) - (currentUserVote === "unlike" ? 1 : 0), 0);
+      userVotes[currentUserId] = "like";
+      update(restaurantRef, { likes: updatedLikes, unlikes: updatedUnlikes, userVotes });
     }
   };
-
+  
   const handleUnlike = (id) => {
     const restaurantRef = ref(database, `restaurants/${id}`);
     const restaurant = restaurants.find((r) => r.id === id);
-
-    if (restaurant.userVote === "unlike") {
+  
+    const userVotes = restaurant.userVotes || {};
+    const currentUserVote = userVotes[currentUserId];
+  
+    if (currentUserVote === "unlike") {
       // Remove the unlike
       const updatedUnlikes = Math.max((restaurant.unlikes || 0) - 1, 0);
-      update(restaurantRef, { unlikes: updatedUnlikes, userVote: null });
+      delete userVotes[currentUserId];
+      update(restaurantRef, { unlikes: updatedUnlikes, userVotes });
     } else {
       // Add the unlike and remove like if it exists
       const updatedUnlikes = (restaurant.unlikes || 0) + 1;
-      const updatedLikes = Math.max((restaurant.likes || 0) - (restaurant.userVote === "like" ? 1 : 0), 0);
-      update(restaurantRef, { unlikes: updatedUnlikes, likes: updatedLikes, userVote: "unlike" });
+      const updatedLikes = Math.max((restaurant.likes || 0) - (currentUserVote === "like" ? 1 : 0), 0);
+      userVotes[currentUserId] = "unlike";
+      update(restaurantRef, { unlikes: updatedUnlikes, likes: updatedLikes, userVotes });
     }
   };
 
   return (
     <div>
+
+      {/* ////////////////////////////////// TESTING BUTTONS ////////////////////////////////// */}
+      <div className="flex justify-center space-x-4 mb-4">
+        {/* Simulate New User */}
+        <button
+          onClick={() => {
+            localStorage.removeItem("creatorId");
+            window.location.reload();
+          }}
+          className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+        >
+          Simulate New User
+        </button>
+
+        {/* Set Specific User ID */}
+        <button
+          onClick={() => {
+            const newUserId = prompt("Enter a new user ID:", "user-12345");
+            if (newUserId) {
+              localStorage.setItem("creatorId", newUserId);
+              window.location.reload();
+            }
+          }}
+          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+        >
+          Set Specific User ID
+        </button>
+      </div>
+
+      {/* ////////////////////////////////// TESTING BUTTONS ////////////////////////////////// */}
+
+
+      {/* Existing Add Restaurant Button */}
       <div className="flex justify-center">
         <button
           onClick={() => setShowForm(true)}
@@ -238,7 +296,7 @@ function Blog() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="px-4 py-2 bg-orange-600 text-white rounded"
                 >
                   Submit
                 </button>
@@ -306,9 +364,9 @@ function Blog() {
                   👎 <span className="ml-2">{restaurant.unlikes || 0}</span>
                 </button>
               </div>
-              {restaurant.userId === currentUserId && (
+              {restaurant.creatorId === currentUserId && ( // Only show the remove button for the creator
                 <button
-                  onClick={() => handleRemove(restaurant.id, restaurant.userId)}
+                  onClick={() => handleRemove(restaurant.id, restaurant.creatorId)}
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors mt-4"
                 >
                   Remove
