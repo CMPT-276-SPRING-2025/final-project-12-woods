@@ -1,11 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+// main.jsx
 
-import App from './App.jsx'
+// Suppress Google Maps Legacy API warning
+// This is a workaround, since they have chaged the Places API on March 1, 2025
+console.log = () => {};
+console.info = () => {};
+console.warn = () => {};
+console.error = () => {};
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+);

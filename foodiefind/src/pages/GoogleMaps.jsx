@@ -49,24 +49,6 @@ const GoogleMaps = () => {
   const userLocationAutocompleteRef = useRef(null);
   const restaurantAutocompleteRef = useRef(null);
 
-  // Remove legacy warning, since google maps has been updated March 1, 2025
-  useEffect(() => {
-    const originalWarn = console.warn;
-    const originalError = console.error;
-    console.warn = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
-      originalWarn(...args);
-    };
-    console.error = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
-      originalError(...args);
-    };
-    return () => {
-      console.warn = originalWarn;
-      console.error = originalError;
-    };
-  }, []);
-
   // On map load, get user location and fetch nearby places
   useEffect(() => {
     if (navigator.geolocation && map) {
@@ -303,12 +285,13 @@ const GoogleMaps = () => {
           zoom={14}
           onLoad={onMapLoad}
           onClick={handleMapClick}
+          options={{ clickableIcons: false }} // added option to disable default POI clicks
         >
           {/* User location marker */}
           {userLocation && (
             <Marker
               position={userLocation}
-              icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+              icon="https://maps.google.com/mapfiles/ms/icons/green-dot.png"
             />
           )}
 
