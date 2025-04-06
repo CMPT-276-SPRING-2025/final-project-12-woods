@@ -1,34 +1,11 @@
 // main.jsx
 
-// Override console.warn and console.error to suppress specific Google Maps warnings.
-const originalWarn = console.warn;
-const originalError = console.error;
-console.warn = (...args) => {
-  if (
-    args[0] &&
-    typeof args[0] === "string" &&
-    (args[0].includes("google.maps") ||
-      args[0].includes("gmp-internal") ||
-      args[0].includes("gmp-map") ||
-      args[0].includes("gmp-place-autocomplete"))
-  ) {
-    return;
-  }
-  originalWarn(...args);
-};
-console.error = (...args) => {
-  if (
-    args[0] &&
-    typeof args[0] === "string" &&
-    (args[0].includes("google.maps") ||
-      args[0].includes("gmp-internal") ||
-      args[0].includes("gmp-map") ||
-      args[0].includes("gmp-place-autocomplete"))
-  ) {
-    return;
-  }
-  originalError(...args);
-};
+// Suppress Google Maps Legacy API warning
+// This is a workaround, since they have chaged the Places API on March 1, 2025
+console.log = () => {};
+console.info = () => {};
+console.warn = () => {};
+console.error = () => {};
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
