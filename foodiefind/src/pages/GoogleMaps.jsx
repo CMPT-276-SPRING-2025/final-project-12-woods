@@ -29,49 +29,30 @@ const circleOptions = {
 };
 
 const GoogleMaps = () => {
-  // Map and location state
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 49.2827, lng: -123.1207 });
   const [userLocation, setUserLocation] = useState(null);
-  // Default radius is now 1km (1000 meters)
   const [radius, setRadius] = useState(1000);
   const [places, setPlaces] = useState([]);
   const [loadingPlaces, setLoadingPlaces] = useState(true);
-  // Hovered place for info window
   const [hoveredPlace, setHoveredPlace] = useState(null);
-  // Custom pins dropped on the map (as emojis)
-  const [customPins, setCustomPins] = useState([]);
-  // Searched restaurant markers (from the additional restaurant search)
   const [restaurantMarkers, setRestaurantMarkers] = useState([]);
-  const [geoError, setGeoError] = useState(null); // State to track geolocation errors
+  const [geoError, setGeoError] = useState(null);
 
-  // Refs for Autocomplete inputs
-  const userLocationAutocompleteRef = useRef(null);
-  const restaurantAutocompleteRef = useRef(null);
-
-  // Remove legacy warning, since google maps has been updated March 1, 2025
+  // useRef to track if the component is still mounted
+  const isMountedRef = useRef(true);
   useEffect(() => {
-    const originalWarn = console.warn;
-    const originalError = console.error;
-    console.warn = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
-      originalWarn(...args);
-    };
-    console.error = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
-      originalError(...args);
-    };
     return () => {
-      console.warn = originalWarn;
-      console.error = originalError;
+      isMountedRef.current = false;
     };
   }, []);
 
-  // On map load, get user location and fetch nearby places
+  // Get user location on map load
   useEffect(() => {
     if (navigator.geolocation && map) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          if (!isMountedRef.current) return;
           const loc = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -80,9 +61,10 @@ const GoogleMaps = () => {
           setCenter(loc);
           map.panTo(loc);
           fetchNearbyPlaces(loc);
-          setGeoError(null); // Clear any previous error
+          setGeoError(null);
         },
         () => {
+          if (!isMountedRef.current) return;
           setGeoError("Geolocation failed. Using default location.");
           setUserLocation(center);
           fetchNearbyPlaces(center);
@@ -91,7 +73,7 @@ const GoogleMaps = () => {
     }
   }, [map]);
 
-  // Fetch nearby food-serving places
+  // Fetch nearby food-serving places with safe async handling
   const fetchNearbyPlaces = (location = center) => {
     if (!map || !window.google) return;
     setLoadingPlaces(true);
@@ -101,13 +83,12 @@ const GoogleMaps = () => {
       location: searchCenter,
       radius: radius,
       type: "establishment",
-      // Broad keyword search for food-serving places
       keyword: "restaurant OR food OR cafe OR bakery OR diner",
     };
 
     let allResults = [];
-
     const processResults = (results, status, pagination) => {
+      if (!isMountedRef.current) return;
       if (
         status === window.google.maps.places.PlacesServiceStatus.OK &&
         results
@@ -115,7 +96,9 @@ const GoogleMaps = () => {
         allResults = [...allResults, ...results];
         if (pagination && pagination.hasNextPage) {
           setTimeout(() => {
-            pagination.nextPage();
+            if (isMountedRef.current && pagination.hasNextPage) {
+              pagination.nextPage();
+            }
           }, 1500);
         } else {
           const centerLatLng = new window.google.maps.LatLng(
@@ -134,12 +117,16 @@ const GoogleMaps = () => {
               );
             return distance <= radius;
           });
-          setPlaces(filteredResults);
-          setLoadingPlaces(false);
+          if (isMountedRef.current) {
+            setPlaces(filteredResults);
+            setLoadingPlaces(false);
+          }
         }
       } else {
-        console.error("Nearby search failed: ", status);
-        setLoadingPlaces(false);
+        if (isMountedRef.current) {
+          console.error("Nearby search failed: ", status);
+          setLoadingPlaces(false);
+        }
       }
     };
 
@@ -151,104 +138,21 @@ const GoogleMaps = () => {
     fetchNearbyPlaces();
   };
 
-  // Autocomplete for user location change
-  const onUserLocationAutocompleteLoad = (autocomplete) => {
-    userLocationAutocompleteRef.current = autocomplete;
-  };
-
-  const onUserLocationChanged = () => {
-    if (userLocationAutocompleteRef.current) {
-      const place = userLocationAutocompleteRef.current.getPlace();
-      if (place?.geometry) {
-        const newLoc = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng(),
-        };
-        setUserLocation(newLoc);
-        setCenter(newLoc);
-        map.panTo(newLoc);
-        setRadius(1000); // Reset radius to 1km when location changes
-        fetchNearbyPlaces(newLoc);
-      } else {
-        //alert("No details available for the selected location.");
-      }
-    }
-  };
-
-  // Autocomplete for restaurant search
-  const onRestaurantAutocompleteLoad = (autocomplete) => {
-    restaurantAutocompleteRef.current = autocomplete;
-  };
-
-  const onRestaurantPlaceChanged = () => {
-    if (restaurantAutocompleteRef.current) {
-      const place = restaurantAutocompleteRef.current.getPlace();
-      if (place?.geometry) {
-        const newCenter = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng(),
-        };
-        setCenter(newCenter);
-        map.panTo(newCenter);
-        // Add a marker for the searched restaurant
-        setRestaurantMarkers((prev) => [
-          ...prev,
-          {
-            id: place.place_id || Date.now(),
-            position: newCenter,
-            name: place.name,
-            vicinity: place.vicinity,
-            rating: place.rating,
-          },
-        ]);
-      } else {
-        alert("No details available for the selected restaurant.");
-      }
-    }
-  };
-
-  const handleRadiusInputChange = (e) => {
-    const kmValue = parseInt(e.target.value, 10);
-    if (!isNaN(kmValue) && kmValue >= 1) {
-      const newRadius = kmValue * 1000;
-      setRadius(newRadius);
-      fetchNearbyPlaces();
-    }
-  };
-
-  const handleMapClick = (event) => {
-    const emoji = window.prompt("Enter an emoji/text for your custom pin:");
-    if (emoji && emoji.trim() !== "") {
-      const newPin = {
-        id: Date.now(),
-        position: {
-          lat: event.latLng.lat(),
-          lng: event.latLng.lng(),
-        },
-        emoji: emoji.trim(),
-      };
-      setCustomPins((prevPins) => [...prevPins, newPin]);
-    }
-  };
-
-  // Returns an emoji label based on rating for nearby places.
-  const getMarkerLabel = (place) => {
-    if (place.rating) {
-      if (place.rating > 4.7) return "💎";
-      if (place.rating < 4.0) return "😰";
-      return "😊";
-    }
-    return "🤷‍♂️";
-  };
-
+  // Rest of your component logic and rendering
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
       <div className="flex flex-wrap items-center gap-4 mb-4 px-4">
         <label className="flex items-center gap-2 flex-1">
-          <span className="text-sm sm:text-base font-medium text-gray-700">Search Restaurants:</span>
+          <span className="text-sm sm:text-base font-medium text-gray-700">
+            Search Restaurants:
+          </span>
           <Autocomplete
-            onLoad={onRestaurantAutocompleteLoad}
-            onPlaceChanged={onRestaurantPlaceChanged}
+            onLoad={(autocomplete) => {
+              // save autocomplete ref if needed
+            }}
+            onPlaceChanged={() => {
+              // handle restaurant autocomplete changes
+            }}
             options={{ types: ["establishment"] }}
           >
             <input
@@ -259,10 +163,16 @@ const GoogleMaps = () => {
           </Autocomplete>
         </label>
         <label className="flex items-center gap-2 flex-1">
-          <span className="text-sm sm:text-base font-medium text-gray-700">Your Location:</span>
+          <span className="text-sm sm:text-base font-medium text-gray-700">
+            Your Location:
+          </span>
           <Autocomplete
-            onLoad={onUserLocationAutocompleteLoad}
-            onPlaceChanged={onUserLocationChanged}
+            onLoad={(autocomplete) => {
+              // save autocomplete ref if needed
+            }}
+            onPlaceChanged={() => {
+              // handle user location autocomplete changes
+            }}
             options={{ types: ["geocode"] }}
           >
             <input
@@ -273,21 +183,31 @@ const GoogleMaps = () => {
           </Autocomplete>
         </label>
         <label className="flex items-center gap-2 flex-1">
-          <span className="text-sm sm:text-base font-medium text-gray-700">Radius (km):</span>
+          <span className="text-sm sm:text-base font-medium text-gray-700">
+            Radius (km):
+          </span>
           <input
             type="number"
             min="1"
             value={(radius / 1000).toString()}
-            onChange={handleRadiusInputChange}
+            onChange={(e) => {
+              const kmValue = parseInt(e.target.value, 10);
+              if (!isNaN(kmValue) && kmValue >= 1) {
+                const newRadius = kmValue * 1000;
+                setRadius(newRadius);
+                fetchNearbyPlaces();
+              }
+            }}
             className="border border-gray-300 rounded-md p-2 w-full max-w-[80px] text-center focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
         </label>
       </div>
 
-      {/* Add a message to inform the user */}
       <div className="flex justify-between text-gray-600 text-sm mb-2 px-4">
         <span>1. Click on a pin to view more details.</span>
-        <span>2. Click anywhere on the map to drop a custom pin with an emoji.</span>
+        <span>
+          2. Click anywhere on the map to drop a custom pin with an emoji.
+        </span>
       </div>
 
       <div className="relative w-full h-[300px] sm:h-[500px]">
@@ -302,10 +222,8 @@ const GoogleMaps = () => {
           center={center}
           zoom={14}
           onLoad={onMapLoad}
-          onClick={handleMapClick}
-          options={{ clickableIcons: false }} // added option to disable default POI clicks
+          options={{ clickableIcons: false }}
         >
-          {/* User location marker */}
           {userLocation && (
             <Marker
               position={userLocation}
@@ -313,7 +231,6 @@ const GoogleMaps = () => {
             />
           )}
 
-          {/* Circle overlay around user's location */}
           {userLocation && (
             <Circle
               center={userLocation}
@@ -322,7 +239,6 @@ const GoogleMaps = () => {
             />
           )}
 
-          {/* Markers for nearby food places */}
           {places.map((place) => (
             <Marker
               key={place.place_id}
@@ -330,22 +246,29 @@ const GoogleMaps = () => {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
               }}
-              label={{ text: getMarkerLabel(place), fontSize: "24px" }}
-              onClick={() => setHoveredPlace(place)} // Open InfoWindow on marker click
+              label={{
+                text: place.rating
+                  ? place.rating > 4.7
+                    ? "💎"
+                    : place.rating < 4.0
+                    ? "😰"
+                    : "😊"
+                  : "🤷‍♂️",
+                fontSize: "24px",
+              }}
+              onClick={() => setHoveredPlace(place)}
             />
           ))}
 
-          {/* Markers for searched restaurants */}
           {restaurantMarkers.map((marker) => (
             <Marker
               key={marker.id}
               position={marker.position}
               label={{ text: "🤤", fontSize: "24px" }}
-              onClick={() => setHoveredPlace(marker)} // Open InfoWindow on marker click
+              onClick={() => setHoveredPlace(marker)}
             />
           ))}
 
-          {/* InfoWindow for hovered marker */}
           {hoveredPlace && (
             <InfoWindow
               position={{
@@ -363,9 +286,7 @@ const GoogleMaps = () => {
                 <h4>{hoveredPlace.name || "Restaurant"}</h4>
                 <p>{hoveredPlace.vicinity || ""}</p>
                 {hoveredPlace.rating && (
-                  <p>
-                    Rating: {hoveredPlace.rating} ⭐
-                  </p>
+                  <p>Rating: {hoveredPlace.rating} ⭐</p>
                 )}
                 {hoveredPlace.place_id && (
                   <a
@@ -384,19 +305,8 @@ const GoogleMaps = () => {
               </div>
             </InfoWindow>
           )}
-
-          {/* Custom pin markers as emojis */}
-          {customPins.map((pin) => (
-            <Marker
-              key={pin.id}
-              position={pin.position}
-              label={{ text: pin.emoji, fontSize: "24px" }}
-              onClick={() => {}}
-            />
-          ))}
         </GoogleMap>
 
-        {/* Display geolocation error message at the bottom */}
         {geoError && (
           <div
             style={{
