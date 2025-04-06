@@ -54,11 +54,27 @@ const GoogleMaps = () => {
     const originalWarn = console.warn;
     const originalError = console.error;
     console.warn = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
+      if (
+        args[0] &&
+        typeof args[0] === "string" &&
+        (args[0].includes("google.maps") ||
+         args[0].includes("gmp-internal") ||
+         args[0].includes("gmp-"))
+      ) {
+        return;
+      }
       originalWarn(...args);
     };
     console.error = (...args) => {
-      if (args[0] && typeof args[0] === "string" && args[0].includes("google.maps")) return;
+      if (
+        args[0] &&
+        typeof args[0] === "string" &&
+        (args[0].includes("google.maps") ||
+         args[0].includes("gmp-internal") ||
+         args[0].includes("gmp-"))
+      ) {
+        return;
+      }
       originalError(...args);
     };
     return () => {
@@ -66,6 +82,7 @@ const GoogleMaps = () => {
       console.error = originalError;
     };
   }, []);
+  
 
   // On map load, get user location and fetch nearby places
   useEffect(() => {
@@ -301,6 +318,7 @@ const GoogleMaps = () => {
           mapContainerClassName="w-full h-full"
           center={center}
           zoom={14}
+          options={{ clickableIcons: false }} // added option to disable default POI clicks
           onLoad={onMapLoad}
           onClick={handleMapClick}
         >
