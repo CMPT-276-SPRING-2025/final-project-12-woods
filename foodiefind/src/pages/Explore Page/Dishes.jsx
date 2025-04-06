@@ -148,7 +148,7 @@ function Dishes() {
                 <div className="flex items-center">
                   <label
                     htmlFor="fileInput"
-                    className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700"
+                    className="px-4 py-2 bg-orange-600 text-white rounded cursor-pointer hover:bg-orange-700"
                   >
                     Choose File
                   </label>
@@ -174,7 +174,7 @@ function Dishes() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="px-4 py-2 bg-orange-600 text-white rounded"
                 >
                   Submit
                 </button>

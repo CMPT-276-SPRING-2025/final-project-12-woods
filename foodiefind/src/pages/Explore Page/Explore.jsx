@@ -23,7 +23,7 @@ function Explore() {
 
   return (
     <div className="bg-white overflow-hidden">
-      <div>
+      <div style={{ position: "relative" }}>
         <video
           className="w-full h-auto"
           autoPlay
@@ -32,9 +32,19 @@ function Explore() {
           src="/explorevideo.mp4"
           type="video/mp4"
         ></video>
+        <button
+          onClick={() => {
+            document
+              .querySelector("#cuisine-list-section")
+              .scrollIntoView({ behavior: "smooth" });
+          }}
+          className="absolute bottom-40 left-1/2 transform -translate-x-1/2 px-8 py-4 bg-orange-600 text-white text-xl rounded-lg hover:bg-blue-700 transition-colors animate-pulse hover:animate-none"
+        >
+          Explore Now!
+        </button>
       </div>
       <div className="flex flex-col">
-        <div className="gap-4 justify-center items-center m-5 sm:m-10">
+        <div id="cuisine-list-section" className="gap-4 justify-center items-center m-5 sm:m-10">
           <h2
             className="text-black text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
@@ -51,7 +61,7 @@ function Explore() {
           </h2>
           <CuisineList />
         </div>
-        <div className="mt-10 m-5 sm:m-10">
+        <div id="blog-section" className="mt-10 m-5 sm:m-10">
           <h2
             className="text-black text-4xl sm:text-6xl mb-10 text-center fade-in"
             style={{
@@ -96,6 +106,13 @@ function Explore() {
           .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+          }
+          .animate-pulse {
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8), 0 0 30px rgba(255, 165, 0, 0.6);
+            transition: box-shadow 0.3s ease-in-out;
+          }
+          .hover\\:animate-none:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6);
           }
         `}
       </style>
