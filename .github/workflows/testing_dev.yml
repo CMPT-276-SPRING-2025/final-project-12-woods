@@ -35,5 +35,5 @@ jobs:
 
       - name: Test Project
         working-directory: ./foodiefind
-        run: npm run test -- --run
+        run: npm test -- --run
 
