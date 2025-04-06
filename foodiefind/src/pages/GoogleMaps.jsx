@@ -253,7 +253,7 @@ const GoogleMaps = () => {
           >
             <input
               type="text"
-              placeholder="Search for any restaurant..."
+              placeholder="Search for any restaurant"
               className="border border-gray-300 rounded-md p-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
