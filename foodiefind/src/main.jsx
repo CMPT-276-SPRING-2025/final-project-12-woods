@@ -2,13 +2,16 @@
 
 // Suppress Google Maps Legacy API warnings in production code
 // This is a workaround, since they have chaged the Places API on March 1, 2025
-// Only disable console logs in production
-if (process.env.NODE_ENV === 'production') {
+// To enable console logs for development, set logs to true 
+const logs = false;
+
+if (!logs) {
   console.log = () => {};
   console.info = () => {};
   console.warn = () => {};
   console.error = () => {};
 }
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
