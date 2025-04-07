@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 
 //code components borrowed from https://github.com/becodewala-youtube/react-ai-chatbot/blob/main/OneDrive/Desktop/New%20folder/from%20solo/react%20projects/ai-chatbot/src/App.js
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 function Gemini() {
   const [messages, setMessages] = useState([]);
@@ -25,7 +26,7 @@ function Gemini() {
 
         // Send the conversation history and the user's latest input to the API
         const response = await axios.post(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI',
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}',
           {
             contents: [
               {
