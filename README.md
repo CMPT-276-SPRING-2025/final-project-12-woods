@@ -37,7 +37,9 @@ To download follow these step:
 ### ✅ Step 2: Clone the Repository
 Clone the FoodieFind GitHub repository to your local machine using your command line:
 
-$ git clone https://github.com/CMPT-276-SPRING-2025/final-project-12-woods.git
+(Note: this is using ssh)
+$ git clone git@github.com:CMPT-276-SPRING-2025/final-project-12-woods.git
+
 
 ---
 
