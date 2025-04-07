@@ -21,7 +21,7 @@ function Plan() {
 
     try {
       // API key remains the same
-      const API_KEY = "AIzaSyBE85Q9TIxhP4hPlAMjAHeUXIb5oTfk9rI";
+      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
       // Improved Prompt for structured Markdown output with links
       const prompt = `Create a realistic full-day meal plan (breakfast, lunch, dinner) for someone in ${location} with a budget of ${budget}.

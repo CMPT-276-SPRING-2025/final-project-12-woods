@@ -8,7 +8,7 @@ import {
   Circle,
 } from "@react-google-maps/api";
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyAMzfBeyQP2K2i-0yDQ-7DCVzRUAprg5vM"; // Replace with your API key
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const libraries = ["places", "geometry"];
 
 const containerStyle = {
