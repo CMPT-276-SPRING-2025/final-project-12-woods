@@ -92,11 +92,18 @@ function Blog() {
 
   const handleRemove = (idToRemove, creatorId) => {
     if (creatorId !== currentUserId) {
-      alert("You can only delete your own blog posts.");
+      alert("You can only delete your own restaurant entries.");
       return;
     }
-    const blogRef = ref(database, `blogs/${idToRemove}`);
-    remove(blogRef);
+    const restaurantRef = ref(database, `restaurants/${idToRemove}`);
+    remove(restaurantRef)
+      .then(() => {
+        alert("Restaurant removed successfully.");
+      })
+      .catch((error) => {
+        console.error("Error removing restaurant:", error);
+        alert("Failed to remove the restaurant. Please try again.");
+      });
   };
 
   const handleLike = (id) => {
