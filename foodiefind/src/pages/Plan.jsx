@@ -129,7 +129,8 @@ function Plan() {
 
   return (
     <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">Plan Your Perfect Food Day</h1>
+      <h1 className="text-5xl text-center">Plan Your Perfect Food Day</h1>
+      <br />
       <p className="text-center mb-6 text-gray-600">Enter your preferences, and we'll create a personalized meal plan for you!</p>
 
       <div className="flex flex-col lg:flex-row gap-6">
