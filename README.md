@@ -1,24 +1,67 @@
-# FoodieFind - food finder website
+# 🍽️ FoodieFind
 
-## Project Overview  
-We are passionate about exploring restaurants that serve high-quality food, and our project is inspired by Vancouver's vibrant food scene. While the city offers a wide variety of dining spots, pricing, locations, and food restrictions can make it challenging to find the perfect restaurant.  
-
-Our goal is to create a user-friendly **Restaurant Finder Website** that allows users to:  
-- Discover restaurants within their budget.  
-- Explore dining spots based on location.  
-- Filter restaurants by dietary restrictions or preferences.  
-
-This platform is designed for both **locals** and **visitors**:  
-- **Food enthusiasts** can uncover hidden gems or experience new cuisines.  
-- **Tourists** can find top-rated spots or explore unique dining experiences.  
-
-Whether you’re looking for an affordable local favorite or a high-end restaurant that suits your dietary needs, this project aims to make your search easier and more enjoyable.  
+**FoodieFind** is a React-based web application that helps users discover local restaurants. It leverages the Google Maps API and Gemini API to offer location-based restaurant search and personalized recommendations.
 
 ---
 
-## Key Features  
-1. **Budget Search**: Find restaurants that match your price range.  
-2. **Location-Based Filtering**: Discover dining spots near your area or a specific location.  
-3. **Dietary Restrictions**: Filter restaurants based on dietary needs (e.g., vegetarian, gluten-free).  
-4. **Cuisine Exploration**: Search for restaurants by cuisine type to try something new.  
-5. **Hidden Gems**: Highlight less-known but highly-rated restaurants.  
+## 🚀 Features
+
+- 🔍 Restaurant discovery 
+- 🗺️ Interactive map with pins 
+- 🥗 Restaurant visit plan
+- 💬 Food recommendation chat 
+
+---
+
+## 🛠️ Local Development Setup
+
+Follow these steps to run the **FoodieFind** project on your local machine:
+
+---
+
+### ✅ Step 1: Install Prerequisites
+
+Make sure you have **Node.js (v14 or higher)** and **npm** installed on your system.
+
+To verify installation, run the following in your terminal:
+
+node -v
+npm -v
+
+To download follow these step:
+1. Go to https://nodejs.org/en
+2. Download Node.js (LTS)
+
+---
+
+### ✅ Step 2: Clone the Repository
+Clone the FoodieFind GitHub repository to your local machine using your command line:
+
+(Note: this is using ssh)
+$ git clone git@github.com:CMPT-276-SPRING-2025/final-project-12-woods.git
+
+
+---
+
+### ✅ Step 3: Navigate to the Project Folder
+Move into the project’s folder using the command line:
+$ cd final-project-12-woods/foodiefind
+
+---
+
+### ✅ Step 4: Install Dependencies
+Install all necessary Node packages by running:
+$ npm install
+This will create a node_modules folder with all dependencies listed in package.json.
+
+---
+
+### ✅ Step 5: Run the Development Server
+Start the local development server with:
+$ npm run dev
+
+Your application should now be accessible at:
+
+http://localhost:5173/
+⚠️ Note: The port number may vary if 5173 is in use.
+
