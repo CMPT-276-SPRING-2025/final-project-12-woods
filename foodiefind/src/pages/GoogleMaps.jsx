@@ -239,6 +239,13 @@ const GoogleMaps = () => {
               className="border border-gray-300 rounded-md p-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
           </Autocomplete>
+          <style>
+            {`
+              .pac-container {
+                width: 300px !important; /* Set the width of the autocomplete dropdown */
+              }
+            `}
+          </style>
         </label>
         <label className="flex items-center gap-2 flex-1">
           <span className="text-sm sm:text-base font-medium text-gray-700">Your Location:</span>
