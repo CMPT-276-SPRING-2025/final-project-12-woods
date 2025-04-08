@@ -64,3 +64,4 @@ Your application should now be accessible at:
 
 http://localhost:5173/
 ⚠️ Note: The port number may vary if 5173 is in use.
+
