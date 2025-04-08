@@ -24,6 +24,10 @@ jobs:
       - name: Install Dependencies
         working-directory: ./foodiefind
         run: npm install
+        
+      - name: Test Project
+        working-directory: ./foodiefind
+        run: npm test -- --run
 
       - name: Lint
         working-directory: ./foodiefind
@@ -32,8 +36,3 @@ jobs:
       - name: Build Project
         working-directory: ./foodiefind
         run: npm run build
-
-      # We can add tests here when someone implement them
-      # - name: Run Tests
-      #   working-directory: ./foodiefind
-      #   run: npm test
