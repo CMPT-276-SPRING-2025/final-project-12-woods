@@ -24,6 +24,7 @@ const FlipLink = ({ children, href }) => {
       className="relative block overflow-hidden whitespace-nowrap text-4xl font-black uppercase sm:text-7xl md:text-8xl lg:text-9xl"
       style={{
         lineHeight: 1,
+        textShadow: "4px 4px 10px rgba(0, 0, 0, 0.8)", // Ensure shadow is applied
       }}
     >
       <div>
@@ -32,9 +33,11 @@ const FlipLink = ({ children, href }) => {
             variants={{
               initial: {
                 y: 0,
+                textShadow: "4px 4px 10px rgba(0, 0, 0, 0.8)", // Shadow for initial state
               },
               hovered: {
                 y: "-100%",
+                textShadow: "4px 4px 10px rgba(0, 0, 0, 0.8)", // Shadow for hovered state
               },
             }}
             transition={{
@@ -55,9 +58,11 @@ const FlipLink = ({ children, href }) => {
             variants={{
               initial: {
                 y: "100%",
+                textShadow: "4px 4px 10px rgba(251, 138, 0, 0.8)", // Shadow for initial state
               },
               hovered: {
                 y: 0,
+                textShadow: "4px 4px 10px rgba(254, 140, 0, 0.8)", // Shadow for hovered state
               },
             }}
             transition={{
@@ -140,17 +145,25 @@ function Home() {
           className="w-full h-full bg-center bg-cover duration-500 absolute inset-0"
         ></div>
         <div className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex flex-col items-center">
-          <FlipLink href="#">Foodie Find</FlipLink>
+          <FlipLink>
+            Foodie Find
+          </FlipLink>
           <TypeAnimation
             sequence={['Discover your inner Foodie', 2000, 'Explore new options', 2000, 'Try new spots never seen before', 2000]}
             wrapper="p"
             speed={1}
             className="mt-8 text-lg sm:text-2xl md:text-4xl font-bold text-center"
+            style={{
+              textShadow: "4px 4px 10px rgba(0, 0, 0, 0.8)", // Stronger shadow
+            }}
             repeat={Infinity}
           />
           <button
             onClick={handleScrollToFeatures}
-            className="mt-8 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105"
+            className="mt-8 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-md shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105"
+            style={{
+              boxShadow: "0 0 20px rgba(255, 106, 0, 0.78)", // Light orange glow
+            }}
           >
             Click to Find
           </button>

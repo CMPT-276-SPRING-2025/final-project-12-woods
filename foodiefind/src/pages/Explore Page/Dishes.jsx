@@ -83,7 +83,7 @@ function Dishes() {
           className="text-lg border-gray-300 
                 w-30 h-30 flex items-center justify-center 
                 text-center transition-transform duration-300 
-                ease-in-out transform hover:scale-105 hover:bg-black hover:text-white 
+                ease-in-out transform hover:scale-105 hover:bg-orange-500 hover:text-white 
                 hover:shadow-[0_0_10px_5px_rgba(0,0,0,0.5)] rounded-[50%] text-black border shadow-lg"
         >
           Add Dish

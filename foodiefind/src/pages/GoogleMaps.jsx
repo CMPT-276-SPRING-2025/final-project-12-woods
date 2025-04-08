@@ -268,8 +268,9 @@ const GoogleMaps = () => {
 
       {/* Add a message to inform the user */}
       <div className="flex justify-between text-gray-600 text-sm mb-2 px-4">
-        <span>1. Click on a pin to view more details.</span>
-        <span>2. Click anywhere on the map to drop a custom pin with an emoji.</span>
+        <span>| Click on a pin to view more details |</span>
+        <span>| Rating scale: 😰 😊 💎 |</span>
+        <span>| Click anywhere on the map to drop a custom pin with an emoji |</span>
       </div>
 
       <div className="relative w-full h-[300px] sm:h-[500px]">
@@ -322,7 +323,7 @@ const GoogleMaps = () => {
             <Marker
               key={marker.id}
               position={marker.position}
-              label={{ text: "🤤", fontSize: "24px" }}
+              label={{ text: "💚", fontSize: "24px" }}
               onClick={() => setHoveredPlace(marker)} // Open InfoWindow on marker click
             />
           ))}
