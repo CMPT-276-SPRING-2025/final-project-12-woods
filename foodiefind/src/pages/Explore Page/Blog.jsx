@@ -150,38 +150,6 @@ function Blog() {
 
   return (
     <div>
-
-      {/* ////////////////////////////////// TESTING BUTTONS ////////////////////////////////// */}
-      <div className="flex justify-center space-x-4 mb-4">
-        {/* Simulate New User */}
-        <button
-          onClick={() => {
-            localStorage.removeItem("creatorId");
-            window.location.reload();
-          }}
-          className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-        >
-          Simulate New User
-        </button>
-
-        {/* Set Specific User ID */}
-        <button
-          onClick={() => {
-            const newUserId = prompt("Enter a new user ID:", "user-12345");
-            if (newUserId) {
-              localStorage.setItem("creatorId", newUserId);
-              window.location.reload();
-            }
-          }}
-          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-        >
-          Set Specific User ID
-        </button>
-      </div>
-
-      {/* ////////////////////////////////// TESTING BUTTONS ////////////////////////////////// */}
-
-
       {/* Existing Add Restaurant Button */}
       <div className="flex justify-center">
         <button
@@ -189,7 +157,7 @@ function Blog() {
           className="text-lg border-gray-300 
                 w-30 h-30 flex items-center justify-center 
                 text-center transition-transform duration-300 
-                ease-in-out transform hover:scale-105 hover:bg-black hover:text-white 
+                ease-in-out transform hover:scale-105 hover:bg-orange-500 hover:text-white 
                 hover:shadow-[0_0_10px_5px_rgba(0,0,0,0.5)] rounded-[50%] text-black border shadow-lg"
         >
           Add Restaurant

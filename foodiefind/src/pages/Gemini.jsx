@@ -6,7 +6,10 @@ import ReactMarkdown from 'react-markdown';
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 function Gemini() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { text: "Don't know what to eat? I can help you 🫡!", user: false }
+  ]);
+  
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +52,7 @@ function Gemini() {
         setLoading(false);
         setMessages([
           ...newMessages,
-          { text: 'Error: Could not get response from AI', user: false },
+          { text: 'Error: Could not get response from AI, try again', user: false },
         ]);
       }
     }
@@ -59,9 +62,9 @@ function Gemini() {
     <div className="mx-auto w-full sm:w-3/4 lg:w-1/2 shadow-2xl">
       <div className="bg-white w-full shadow-lg border border-gray-300 rounded-lg overflow-hidden">
         <div className="bg-orange-500 text-white p-4 text-center">
-          <div className="text-lg sm:text-2xl font-bold">FoodieFind</div>
+          <div className="text-lg sm:text-2xl font-bold">FoodieBot 🤖</div>
         </div>
-        <div className="p-4 h-64 sm:h-96 overflow-y-auto">
+        <div className="p-4 h-64 sm:h-96 overflow-y-auto"> 
           {messages.map((msg, index) => (
             <div key={index} className={`flex ${msg.user ? 'justify-end' : 'justify-start'} mb-2`}>
               <div className={`rounded-lg p-2 shadow-xl ${msg.user ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
