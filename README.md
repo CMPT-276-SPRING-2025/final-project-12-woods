@@ -120,11 +120,11 @@ Visit the displayed URL in your browser to access the app.
 > ⚠️ The port number may vary if 5173 is already in use.
 
 ---
-###🔗 Project Links
-Live Website: [https://rezoome.netlify.app/](https://foodiefindz.netlify.app/)
-Demo Video: [Insert Link Here]
-Final Report: [Insert Link Here]
+### 🔗 Project Links
+- Live Website: [https://rezoome.netlify.app/](https://foodiefindz.netlify.app/)
+- Demo Video: [Insert Link Here]
+- Final Report: [Insert Link Here]
 
-###⚖️ License & Usage
+### ⚖️ License & Usage
 This project is licensed under the MIT license and is intended strictly for educational and training purposes. 
 
