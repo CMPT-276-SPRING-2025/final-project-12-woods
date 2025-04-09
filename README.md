@@ -124,7 +124,7 @@ Visit the displayed URL in your browser to access the app.
 ### 🔗 Project Links
 - Live Website: [FoodieFind](https://foodiefindz.netlify.app/)
 - Demo Video: [Demo Video](https://youtu.be/2rNCe_G50Q8?si=An6jaVJ6YgpZSL1y)
-- Final Report: [Report](misc/WOODS 12 Final Project Report.pdf)
+- Final Report: [Report](/misc/WOODS 12 Final Project Report.pdf)
 
 ---
 
