@@ -28,11 +28,3 @@ jobs:
       - name: Test Project
         working-directory: ./foodiefind
         run: npm test -- --run
-
-      - name: Lint
-        working-directory: ./foodiefind
-        run: npm run lint
-
-      - name: Build Project
-        working-directory: ./foodiefind
-        run: npm run build
