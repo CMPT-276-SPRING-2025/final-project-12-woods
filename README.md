@@ -131,3 +131,6 @@ Visit the displayed URL in your browser to access the app.
 ### ⚖️ License & Usage
 This project is licensed under the MIT license and is intended strictly for educational and training purposes. 
 
+http://localhost:5173/
+⚠️ Note: The port number may vary if 5173 is in use.
+

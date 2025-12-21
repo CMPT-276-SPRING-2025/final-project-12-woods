@@ -3,7 +3,7 @@ import React from "react";
 const teamMembers = [
   {
     name: "Ash Aung",
-    role: "Project Manager, Developer",
+    role: "QA, Developer",
     image: "/profiles/Ash.jpg",
     description: "Ash is our project Manager, he is a real party animal",
   },
@@ -15,7 +15,7 @@ const teamMembers = [
   },
   {
     name: "Jim Chen",
-    role: "QA, Developer",
+    role: "Project Manager, QA, Developer",
     image: "/profiles/Jim.jpg",
     description: "Jim is our QA tester, he is a fun guy and a funny guy",
   },
