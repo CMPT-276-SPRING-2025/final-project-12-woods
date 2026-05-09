@@ -3,9 +3,9 @@ import React from "react";
 const teamMembers = [
   {
     name: "Ash Aung",
-    role: "QA, Developer",
+    role: "Project Manager, Developer",
     image: "/profiles/Ash.jpg",
-    description: "Ash is secondary QA tester, he is a real party animal",
+    description: "Ash is our Project Manager, he is a real party animal",
   },
   {
     name: "Damon Yiu",
@@ -15,9 +15,9 @@ const teamMembers = [
   },
   {
     name: "Jim Chen",
-    role: "Project Manager, QA, Developer",
+    role: "QA, Developer",
     image: "/profiles/Jim.jpg",
-    description: "Jim is our QA tester and Project Manager, he is a fun guy and a funny guy",
+    description: "Jim is our QA tester, he is a fun guy and a funny guy",
   },
   {
     name: "Amir Matianiu",
